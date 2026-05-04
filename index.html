@@ -1,0 +1,1543 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>MY ASSISTANT</title>
+
+  <meta name="theme-color" content="#8878cc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MY ASSISTANT" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%238878cc'/><rect x='14' y='18' width='72' height='48' rx='14' fill='white' opacity='.95'/><polygon points='24,64 12,82 46,64' fill='white' opacity='.95'/><circle cx='34' cy='42' r='6' fill='%238878cc'/><circle cx='50' cy='42' r='6' fill='%238878cc'/><circle cx='66' cy='42' r='6' fill='%238878cc'/><path d='M72 18 l2 5 l5 2 l-5 2 l-2 5 l-2-5 l-5-2 l5-2 z' fill='%23ecd9a3'/></svg>" />
+
+  <!-- Apple 홈 화면 아이콘 -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%238878cc'/><rect x='72' y='96' width='368' height='244' rx='72' fill='white' opacity='.95'/><polygon points='122,336 60,424 236,336' fill='white' opacity='.95'/><circle cx='176' cy='218' r='30' fill='%238878cc'/><circle cx='256' cy='218' r='30' fill='%238878cc'/><circle cx='336' cy='218' r='30' fill='%238878cc'/><path d='M390 88 l10 26 l26 10 l-26 10 l-10 26 l-10-26 l-26-10 l26-10 z' fill='%23ecd9a3'/><circle cx='430' cy='140' r='8' fill='%23ecd9a3' opacity='.7'/></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+
+:root {
+  --bg: #f0eef8;
+  --s1: #ffffff;
+  --s2: #f7f5fd;
+  --bd: #e2ddf8;
+  --lav: #8878cc;
+  --lav-soft: #b8b0e8;
+  --lav-pale: #edeafc;
+  --lav-xs: #f5f3ff;
+  --t1: #24223a;
+  --t2: #8c8aac;
+  --t3: #c4c2d8;
+  --red: #f3b5be;
+  --ora: #f5cfae;
+  --ylw: #ecd9a3;
+  --grn: #b6dec6;
+  --blu: #b8d2ee;
+  --pur: #d4c2ee;
+  --shadow: 0 2px 16px rgba(80, 60, 160, 0.08);
+  --shadow-sm: 0 1px 6px rgba(80, 60, 160, 0.06);
+}
+
+body.dark {
+  --bg: #1a1826;
+  --s1: #232130;
+  --s2: #2c293e;
+  --bd: #3d3a58;
+  --lav: #a898e8;
+  --lav-soft: #8878cc;
+  --lav-pale: #2e2b50;
+  --lav-xs: #252340;
+  --t1: #e8e6f8;
+  --t2: #9090b8;
+  --t3: #5a587a;
+  --red: #c47880;
+  --ora: #c4a070;
+  --ylw: #bba060;
+  --grn: #72a884;
+  --blu: #7098c0;
+  --pur: #9880c8;
+  --shadow: 0 2px 20px rgba(0,0,0,0.4);
+  --shadow-sm: 0 1px 8px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; transition: background-color .25s, border-color .25s, color .15s; }
+body { background: var(--bg); color: var(--t1); font-family: 'Nunito', 'Segoe UI', sans-serif; min-height: 100vh; font-size: 14px; }
+
+.hdr { padding: 16px 16px 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.hdr-t { font-family: 'Space Mono', monospace; font-size: 15px; color: var(--lav); letter-spacing: 1px; font-weight: 700; }
+.hdr-d { font-size: 11px; color: var(--t2); font-weight: 500; }
+.hdr-right { display: flex; align-items: center; gap: 8px; }
+.icon-btn { background: var(--s1); border: none; border-radius: 10px; padding: 7px 10px; cursor: pointer; font-size: 14px; color: var(--t2); box-shadow: var(--shadow-sm); transition: .15s; }
+.icon-btn:hover { background: var(--lav-pale); color: var(--lav); }
+
+/* 로그인 상태 배지 */
+.login-badge { display: flex; align-items: center; gap: 6px; background: var(--lav-pale); border-radius: 10px; padding: 6px 10px; font-size: 11px; color: var(--lav); font-weight: 600; cursor: pointer; border: none; }
+.login-badge img { width: 18px; height: 18px; border-radius: 50%; }
+.sync-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--lav); color: #fff; padding: 10px 22px; border-radius: 20px; font-size: 13px; font-weight: 600; z-index: 9999; box-shadow: 0 4px 16px rgba(80,60,160,.3); opacity: 0; transition: opacity .3s; pointer-events: none; }
+.sync-toast.show { opacity: 1; }
+
+.tnav { display: flex; padding: 10px 16px 0; }
+.tnav button { flex: 1; padding: 12px 4px 10px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--t3); font-size: 11px; cursor: pointer; transition: .2s; font-family: 'Space Mono', monospace; letter-spacing: .5px; }
+.tnav button.active { color: var(--lav); border-bottom-color: var(--lav); }
+
+.page { padding: 14px 16px 60px; max-width: 680px; margin: 0 auto; }
+
+.card { background: var(--s1); border-radius: 20px; padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.lbl { font-size: 13px; color: var(--t1); letter-spacing: -0.01em; margin-bottom: 14px; font-family: 'Nunito', 'Segoe UI', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.lbl svg { color: var(--lav); }
+
+.app input, .app select { background: var(--s2); border: none; border-radius: 12px; padding: 10px 14px; color: var(--t1); font-size: 14px; outline: none; font-family: inherit; transition: .2s; width: 100%; }
+.app input:focus, .app select:focus { background: var(--lav-pale); box-shadow: 0 0 0 2px var(--lav-soft); }
+.app input::placeholder { color: var(--t3); }
+
+.btn { background: var(--lav); border: none; border-radius: 12px; padding: 10px 18px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: .15s; white-space: nowrap; font-family: inherit; }
+.btn:hover { background: #7060bc; }
+.btn-g { background: var(--lav-pale); color: var(--lav); font-weight: 500; }
+.btn-g:hover, .btn-g.on { background: var(--lav); color: #fff; }
+.btn-sm { font-size: 12px; padding: 7px 13px; border-radius: 10px; }
+.btn-icon { background: none; border: none; cursor: pointer; padding: 3px 5px; font-size: 14px; line-height: 1; color: var(--t2); }
+.btn-icon:hover { color: var(--lav); }
+.row { display: flex; gap: 8px; align-items: center; }
+.empty { text-align: center; color: var(--t3); padding: 28px; font-size: 13px; line-height: 1.8; }
+
+.sub-tabs { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.sub-tabs::-webkit-scrollbar { display: none; }
+.sub-tab { padding: 7px 16px; background: var(--s1); border: none; border-radius: 20px; color: var(--t2); font-size: 12px; cursor: pointer; text-align: center; transition: .2s; white-space: nowrap; box-shadow: var(--shadow-sm); font-weight: 500; font-family: inherit; }
+.sub-tab.on { background: var(--lav); color: #fff; box-shadow: 0 4px 12px rgba(136, 120, 204, .3); }
+
+.add-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.add-row input { flex: 1; }
+.frow { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+.frow .btn-sm { border-radius: 20px; }
+
+.pri-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
+.pri-picker { position: relative; }
+.pri-trigger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; background: var(--lav-pale); border: none; border-radius: 20px; cursor: pointer; font-size: 12px; color: var(--lav); font-weight: 500; font-family: inherit; transition: .15s; }
+.pri-trigger:hover, .pri-trigger.on { background: var(--lav); color: #fff; }
+.pri-trigger .caret { font-size: 9px; opacity: .8; }
+.pri-menu { position: absolute; top: calc(100% + 6px); left: 0; background: #fff; border-radius: 14px; padding: 8px; box-shadow: 0 8px 24px rgba(80,60,160,.16); display: flex; gap: 6px; z-index: 20; }
+.pri-menu .pri-opt { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: .15s; background: transparent; padding: 0; }
+.pri-menu .pri-opt:hover { background: var(--lav-xs); }
+.pri-menu .pri-opt.sel { border-color: var(--lav); }
+.ti { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--s2); border-radius: 14px; margin-bottom: 7px; border-left: 4px solid transparent; }
+.ti.pr { border-left: 4px solid var(--red); background: color-mix(in srgb, var(--red) 12%, var(--s2)); }
+.ti.po { border-left: 4px solid var(--ora); background: color-mix(in srgb, var(--ora) 12%, var(--s2)); }
+.ti.py { border-left: 4px solid var(--ylw); background: color-mix(in srgb, var(--ylw) 12%, var(--s2)); }
+.ti.pg { border-left: 4px solid var(--grn); background: color-mix(in srgb, var(--grn) 12%, var(--s2)); }
+.ti.pb { border-left: 4px solid var(--blu); background: color-mix(in srgb, var(--blu) 12%, var(--s2)); }
+.ti.pp { border-left: 4px solid var(--pur); background: color-mix(in srgb, var(--pur) 12%, var(--s2)); }
+.ti.dn .tt { text-decoration: line-through; color: var(--t3); }
+.ti-edit { display: flex; gap: 6px; flex: 1; align-items: center; }
+.ti-edit input { flex: 1; padding: 6px 10px; font-size: 13px; }
+.chk { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--t3); flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: .15s; }
+.chk.on { background: var(--lav); border-color: var(--lav); color: #fff; }
+.tt { flex: 1; font-size: 14px; }
+.prog-card { transition: background .6s ease, box-shadow .6s ease; }
+.prog-info { display: flex; justify-content: space-between; font-size: 12px; color: var(--t2); margin-bottom: 7px; font-weight: 500; }
+.pbar { background: var(--lav-pale); border-radius: 6px; height: 6px; overflow: hidden; }
+.pfill { height: 100%; background: linear-gradient(90deg, var(--lav), var(--lav-soft)); border-radius: 6px; transition: .4s; }
+@keyframes pctBounce { 0%{transform:scale(1)} 40%{transform:scale(1.35)} 70%{transform:scale(.92)} 100%{transform:scale(1)} }
+.pct-bounce { animation: pctBounce .4s ease forwards; }
+#pPct, .pPct { font-weight: 700; font-size: 13px; transition: color .4s; display: inline-block; }
+
+.goals-box { background: var(--lav-xs); border-radius: 16px; padding: 14px; margin-bottom: 14px; }
+.goals-box .lbl { color: var(--lav); }
+.goal-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; background: #fff; border-radius: 12px; margin-bottom: 6px; box-shadow: var(--shadow-sm); }
+.goal-txt { flex: 1; font-size: 13px; }
+.goal-chk { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--t3); flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 9px; transition: .15s; }
+.goal-chk.on { background: var(--lav); border-color: var(--lav); color: #fff; }
+.goal-item.done .goal-txt { text-decoration: line-through; color: var(--t3); }
+.goal-add { display: flex; gap: 7px; margin-top: 8px; }
+.goal-add input { flex: 1; background: #fff; }
+
+.week-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.wnb { background: var(--lav-pale); border: none; color: var(--lav); border-radius: 10px; padding: 6px 13px; cursor: pointer; font-size: 16px; font-weight: 600; }
+.wnb:hover { background: var(--lav); color: #fff; }
+.week-title { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--t2); }
+.day-col { background: var(--s2); border-radius: 16px; padding: 12px; margin-bottom: 8px; }
+.day-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+.day-name { font-size: 13px; font-weight: 600; }
+.day-name.td { color: var(--lav); }
+.day-date-lbl { font-size: 11px; color: var(--t3); }
+.day-ev { display: flex; align-items: center; gap: 7px; padding: 7px 10px; background: #fff; border-radius: 10px; margin-bottom: 4px; box-shadow: var(--shadow-sm); }
+.day-ev .chk { width: 16px; height: 16px; }
+.day-ev-edit { display: flex; gap: 5px; flex: 1; }
+.day-ev-edit input { flex: 1; padding: 5px 9px; font-size: 13px; }
+.ev-type-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.day-add-row { display: flex; gap: 6px; margin-top: 8px; }
+.day-add-row input { flex: 1; font-size: 13px; padding: 8px 12px; background: #fff; }
+
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.cnb { background: var(--lav-pale); border: none; color: var(--lav); border-radius: 10px; padding: 6px 13px; cursor: pointer; font-size: 16px; font-weight: 600; }
+.cnb:hover { background: var(--lav); color: #fff; }
+.cal-title { font-size: 15px; font-weight: 600; }
+.cal-grid { display: grid; grid-template-columns: 22px repeat(7, 1fr); border: 1px solid var(--bd); border-radius: 14px; overflow: hidden; }
+.ch { text-align: center; font-size: 11px; color: var(--t2); padding: 10px 0; font-weight: 700; background: var(--s2); border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); }
+.ch:last-child { border-right: none; }
+.cd { min-height: 58px; display: flex; flex-direction: column; justify-content: space-between; padding: 6px 7px; font-size: 13px; position: relative; transition: .15s; background: var(--s1); cursor: pointer; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); }
+.cd:nth-child(7n) { border-right: none; }
+.cd:hover { background: var(--lav-xs); }
+.cd.other { background: var(--s2); }
+.cd.sel { background: var(--lav-pale); }
+.cd-num { align-self: flex-end; font-size: 13px; font-weight: 500; color: var(--t1); width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.cd.other .cd-num { color: var(--t3); }
+.cd.sel .cd-num { color: var(--lav); font-weight: 700; }
+.cd-num.today-num { background: var(--lav); color: #fff; font-weight: 700; }
+.cd-dots { display: flex; gap: 3px; align-self: flex-start; min-height: 5px; }
+.edot { width: 5px; height: 5px; border-radius: 50%; }
+.edot.timed { background: var(--lav); }
+.edot.allday { background: var(--blu); }
+.edot.habit { background: var(--pur); }
+.cd.p1 { box-shadow: inset 0 0 0 3px #d8d0ff; }
+.cd.p2 { box-shadow: inset 0 0 0 3px #c0b0f0; }
+.cd.p3 { box-shadow: inset 0 0 0 3px #a090e0; }
+.cd.p4 { box-shadow: inset 0 0 0 4px #8878cc; }
+.cd.p5 { box-shadow: inset 0 0 0 4px #6858aa, inset 0 0 14px rgba(120, 100, 200, .25); background: #faf8ff; }
+.ev-panel { margin-top: 14px; border-top: 1px solid var(--lav-pale); padding-top: 14px; }
+.ev-hdr { font-size: 13px; color: var(--lav); font-weight: 600; margin-bottom: 12px; }
+.ev-form { background: var(--s2); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+.ev-form-row { display: flex; gap: 7px; margin-bottom: 8px; align-items: center; }
+.ev-form-row input { flex: 1; background: #fff; }
+.allday-toggle { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--t2); cursor: pointer; margin-bottom: 9px; }
+.allday-toggle input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--lav); cursor: pointer; flex-shrink: 0; }
+.allday-tag { font-size: 10px; padding: 3px 9px; border-radius: 20px; background: var(--lav-pale); color: var(--lav); font-weight: 600; }
+.ev-item { display: flex; align-items: center; gap: 9px; padding: 10px 13px; background: var(--s2); border-radius: 12px; margin-bottom: 6px; }
+.ev-time { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--t2); min-width: 38px; }
+.ev-txt { flex: 1; font-size: 13px; }
+.ev-item.done-ev .ev-txt { text-decoration: line-through; color: var(--t3); }
+.ev-inline-edit { display: flex; gap: 6px; flex: 1; }
+.ev-inline-edit input { flex: 1; padding: 5px 9px; font-size: 13px; background: #fff; }
+.habit-section-lbl { font-size: 10px; color: var(--pur); letter-spacing: 1px; margin: 12px 0 6px; font-family: 'Space Mono', monospace; font-weight: 600; }
+.habit-ev-row { display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: #f9f4ff; border-radius: 10px; margin-bottom: 5px; }
+
+.habit-card { background: var(--s1); border-radius: 18px; padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow); border-left: 4px solid transparent; }
+.habit-head { display: flex; align-items: center; gap: 11px; margin-bottom: 12px; }
+.habit-icon { font-size: 22px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--lav-pale); border-radius: 12px; }
+.habit-name { flex: 1; font-size: 15px; font-weight: 600; }
+.habit-streak { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--lav); font-weight: 700; }
+.habit-streak-lbl { font-size: 10px; color: var(--t3); }
+.habit-grid { display: flex; gap: 5px; margin-bottom: 10px; }
+.hg-day { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.hg-d { font-size: 10px; color: var(--t3); font-weight: 500; }
+.hg-dot { width: 26px; height: 26px; border-radius: 8px; background: var(--s2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: .15s; }
+.hg-dot.done { background: var(--lav-pale); color: var(--lav); }
+.hg-dot.today-dot { box-shadow: 0 0 0 2px var(--lav); }
+.hg-dot.future { opacity: .25; cursor: default; }
+.day-pill { font-size: 10px; padding: 3px 9px; border-radius: 20px; background: var(--lav-pale); color: var(--lav); font-weight: 600; }
+.habit-days-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+.day-sel { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.day-btn { min-width: 36px; height: 32px; padding: 0 10px; border-radius: 20px; background: var(--s2); border: none; color: var(--t2); font-size: 12px; cursor: pointer; transition: .15s; font-weight: 500; font-family: inherit; }
+.day-btn.on { background: var(--lav); color: #fff; }
+.habit-edit-form { background: var(--s2); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+.habit-edit-form input { margin-bottom: 7px; background: #fff; }
+.habit-color-row { display: flex; gap: 7px; margin-bottom: 12px; flex-wrap: wrap; }
+.hb-col-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 7px 10px; border-radius: 14px; border: 2px solid transparent; transition: .15s; background: none; font-family: inherit; }
+.hb-col-btn:hover { background: var(--lav-xs); }
+.hb-col-btn.sel { border-color: var(--t1); background: var(--lav-xs); }
+.hb-col-dot { width: 30px; height: 30px; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,.1); }
+.hb-col-label { font-size: 10px; color: var(--t2); font-weight: 700; }
+
+.color-picker { display: flex; gap: 7px; margin-bottom: 10px; flex-wrap: wrap; }
+.color-dot { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; transition: .15s; border: 2px solid transparent; }
+.color-dot.sel { border-color: var(--t1); transform: scale(1.2); }
+.cat-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.cat-card { background: var(--s1); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
+.cat-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; cursor: pointer; transition: .15s; }
+.cat-head:hover { background: var(--lav-xs); }
+.cat-icon { font-size: 20px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--lav-pale); border-radius: 12px; }
+.cat-name-txt { flex: 1; font-size: 14px; font-weight: 600; }
+.cat-summary { font-size: 11px; color: var(--t3); }
+.cat-arrow { color: var(--t3); font-size: 14px; transition: .2s; }
+.cat-card.open .cat-arrow { transform: rotate(90deg); }
+.cat-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--lav-xs); }
+.cat-card.open .cat-body { display: block; }
+.step-list { margin: 10px 0; }
+.step-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; background: var(--s2); border-radius: 12px; margin-bottom: 6px; }
+.step-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.step-nm { flex: 1; font-size: 13px; }
+.step-dur { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--lav); min-width: 46px; text-align: right; font-weight: 700; }
+.step-edit-row { display: flex; gap: 5px; flex: 1; align-items: center; flex-wrap: wrap; }
+.step-edit-row input { padding: 5px 9px; font-size: 12px; background: #fff; }
+.add-step { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; align-items: center; }
+.add-step input { flex: 1; min-width: 70px; background: #fff; }
+.dur-inp { width: 62px !important; flex: none !important; }
+.edit-form { background: var(--s2); border-radius: 14px; padding: 13px; margin-bottom: 10px; }
+.edit-form input { margin-bottom: 7px; background: #fff; }
+.back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--t2); cursor: pointer; font-size: 13px; margin-bottom: 14px; padding: 0; font-weight: 500; font-family: inherit; }
+.back-btn:hover { color: var(--lav); }
+.run-title { font-size: 12px; color: var(--t3); margin-bottom: 4px; font-weight: 500; }
+.run-sname { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+.ring-outer { display: flex; justify-content: center; position: relative; margin-bottom: 16px; }
+.ring-outer svg { transform: rotate(-90deg); }
+.ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.ring-time { font-family: 'Space Mono', monospace; font-size: 42px; font-weight: 700; letter-spacing: -2px; }
+.ring-lbl { font-size: 11px; color: var(--t3); margin-top: 5px; letter-spacing: .5px; }
+.pomo-btns { display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; }
+.pomo-btns .btn { min-width: 120px; font-size: 14px; padding: 13px 20px; }
+.rst-btn { background: var(--s2); color: var(--t2); }
+.rst-btn:hover { background: var(--lav-pale); color: var(--lav); }
+.notif-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 16px; }
+.notif-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--t2); cursor: pointer; }
+.notif-toggle input { width: 15px; height: 15px; accent-color: var(--lav); cursor: pointer; flex-shrink: 0; }
+.sp-progress { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+.sp-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--lav-pale); border: 2px solid var(--lav-pale); cursor: pointer; transition: .2s; }
+.sp-dot:hover { background: var(--lav-soft); border-color: var(--lav-soft); transform: scale(1.3); }
+.sp-dot.d { background: var(--lav); border-color: var(--lav); }
+.sp-dot.d:hover { background: #6858aa; }
+.sp-dot.c { background: var(--lav); border-color: var(--lav); box-shadow: 0 0 0 3px var(--lav-pale); transform: scale(1.2); }
+.stats-row { display: flex; justify-content: center; gap: 48px; }
+.stat-box { text-align: center; background: var(--s2); border-radius: 16px; padding: 14px 24px; }
+.stat-val { font-family: 'Space Mono', monospace; font-size: 24px; color: var(--lav); font-weight: 700; }
+.stat-lbl { font-size: 11px; color: var(--t3); margin-top: 4px; }
+
+.cal-view-3 { display: flex; gap: 6px; margin-bottom: 14px; justify-content: center; }
+.cvs3-btn { padding: 7px 16px; background: var(--s1); border: none; border-radius: 20px; color: var(--t2); font-size: 11px; cursor: pointer; font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: .5px; box-shadow: var(--shadow-sm); transition: .15s; white-space: nowrap; }
+.cvs3-btn.on { background: var(--lav); color: #fff; box-shadow: 0 4px 12px rgba(136,120,204,.3); }
+
+.ch-empty { background: var(--s2); border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); }
+.cw-label { display: flex; align-items: center; justify-content: center; background: var(--s2); border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); font-size: 8px; color: var(--t3); font-family: 'Space Mono', monospace; writing-mode: vertical-rl; letter-spacing: 1px; font-weight: 700; }
+.cd-hol { font-size: 7px; color: #e05050; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 1px; }
+.cd.is-hol .cd-num { color: #e05050 !important; }
+.slot-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 7px; }
+.slot-btn { padding: 4px 9px; border-radius: 12px; border: none; cursor: pointer; font-size: 11px; font-weight: 600; font-family: inherit; transition: .15s; background: var(--s2); color: var(--t2); }
+.slot-btn.on { background: var(--lav); color: #fff; }
+.slot-btn:hover { background: var(--lav-pale); color: var(--lav); }
+.slot-btn.on:hover { background: #7060bc; color: #fff; }
+
+.proj-card { background: var(--s1); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 12px; }
+.proj-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; cursor: pointer; transition: .15s; }
+.proj-head:hover { background: var(--lav-xs); }
+.proj-icon { font-size: 22px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 14px; flex-shrink: 0; }
+.proj-info { flex: 1; min-width: 0; }
+.proj-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.proj-meta { font-size: 11px; color: var(--t2); }
+.proj-dday-box { text-align: right; flex-shrink: 0; }
+.proj-dday { font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700; }
+.proj-dday-lbl { font-size: 10px; color: var(--t3); margin-top: 1px; }
+.proj-arrow { color: var(--t3); font-size: 16px; transition: .2s; flex-shrink: 0; margin-left: 2px; }
+.proj-card.open .proj-arrow { transform: rotate(90deg); }
+.proj-body { display: none; padding: 0 18px 16px; border-top: 1px solid var(--lav-xs); }
+.proj-card.open .proj-body { display: block; }
+.proj-pbar-wrap { margin: 14px 0 12px; }
+.proj-prog-info { display: flex; justify-content: space-between; font-size: 11px; color: var(--t2); margin-bottom: 6px; font-weight: 500; }
+.proj-desc { font-size: 13px; color: var(--t2); margin-bottom: 12px; line-height: 1.6; padding: 10px 13px; background: var(--s2); border-radius: 12px; }
+.ptask { display: flex; align-items: center; gap: 9px; padding: 10px 13px; background: var(--s2); border-radius: 12px; margin-bottom: 6px; }
+.ptask.done .ptask-txt { text-decoration: line-through; color: var(--t3); }
+.ptask-txt { flex: 1; font-size: 13px; }
+.ptask-due { font-size: 10px; color: var(--t3); font-family: 'Space Mono', monospace; white-space: nowrap; padding: 2px 7px; background: var(--s1); border-radius: 8px; }
+.ptask-due.overdue { color: var(--red); font-weight: 700; background: #fce8ea; }
+.ptask-memo-btn { background: none; border: none; cursor: pointer; padding: 2px 6px; font-size: 11px; color: var(--t3); border-radius: 6px; transition: .15s; }
+.ptask-memo-btn:hover { color: var(--lav); background: var(--lav-xs); }
+.ptask-memo-btn.has-memo { color: var(--lav-soft); }
+.ptask-memo-area { padding: 4px 12px 10px 44px; }
+.ptask-memo-area textarea { width: 100%; background: var(--s2); border: 1.5px solid transparent; border-radius: 10px; padding: 8px 11px; font-size: 12px; font-family: inherit; color: var(--t1); resize: none; outline: none; transition: .2s; min-height: 56px; }
+.ptask-memo-area textarea:focus { border-color: var(--lav-soft); background: var(--s1); }
+.proj-add-task { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+.proj-add-task input { flex: 1; min-width: 100px; background: #fff; }
+.proj-date-inp { width: 130px !important; flex: none !important; font-size: 12px !important; }
+.proj-new-card { background: var(--s1); border-radius: 20px; padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.proj-new-card input { margin-bottom: 8px; }
+.proj-color-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+.proj-col-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: .15s; flex-shrink: 0; }
+.proj-col-dot.sel { border-color: var(--t1); transform: scale(1.2); }
+.proj-memo-wrap { margin-top: 14px; border-top: 1px solid var(--lav-xs); padding-top: 12px; }
+.proj-memo-lbl { font-size: 11px; color: var(--t3); font-weight: 700; margin-bottom: 6px; letter-spacing: .5px; }
+.proj-memo { width: 100%; min-height: 80px; resize: vertical; background: var(--s2); border: 1.5px solid transparent; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-family: inherit; color: var(--t1); outline: none; transition: border-color .2s; line-height: 1.6; box-sizing: border-box; }
+.proj-memo:focus { border-color: var(--lav-soft); background: #fff; }
+.proj-empty { text-align: center; padding: 40px 20px; color: var(--t3); font-size: 13px; line-height: 2; }
+.ti-memo-btn { background: none; border: none; cursor: pointer; padding: 2px 5px; font-size: 11px; color: var(--t3); transition: .15s; border-radius: 6px; }
+.ti-memo-btn:hover { color: var(--lav); background: var(--lav-xs); }
+.ti-memo-btn.has-memo { color: var(--lav-soft); }
+.ti-memo-area { padding: 6px 14px 10px 44px; }
+.ti-memo-area textarea { width: 100%; background: var(--s2); border: 1.5px solid transparent; border-radius: 10px; padding: 8px 11px; font-size: 12px; font-family: inherit; color: var(--t1); resize: none; outline: none; transition: .2s; min-height: 60px; }
+.ti-memo-area textarea:focus { border-color: var(--lav-soft); background: var(--s1); }
+
+.proj-task-row { display: flex; align-items: center; gap: 9px; padding: 9px 13px; background: var(--s2); border-radius: 12px; margin-bottom: 6px; }
+.proj-task-source { font-size: 10px; color: var(--t3); white-space: nowrap; padding: 2px 7px; border-radius: 8px; background: var(--s1); }
+
+.stat-section { margin-bottom: 16px; }
+.stat-section-title { font-size: 11px; font-weight: 700; color: var(--lav); letter-spacing: 1px; font-family: 'Space Mono', monospace; margin-bottom: 12px; text-transform: uppercase; }
+.big-numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.big-num-box { background: var(--s1); border-radius: 16px; padding: 14px 10px; text-align: center; box-shadow: var(--shadow-sm); }
+.big-num-val { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--lav); line-height: 1; }
+.big-num-lbl { font-size: 11px; color: var(--t3); margin-top: 6px; line-height: 1.5; font-family: 'Nunito', sans-serif; font-weight: 600; }
+.habit-stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.habit-stat-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.habit-stat-info { flex: 1; min-width: 0; }
+.habit-stat-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Nunito', sans-serif; color: var(--t1); }
+.habit-stat-bar-wrap { height: 6px; background: var(--lav-pale); border-radius: 4px; margin-top: 5px; overflow: hidden; }
+.habit-stat-bar { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.4,0,.2,1); }
+.habit-stat-pct { font-size: 12px; font-weight: 700; white-space: nowrap; flex-shrink: 0; font-family: 'Space Mono', monospace; }
+.proj-stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.proj-stat-color { width: 4px; height: 36px; border-radius: 4px; flex-shrink: 0; }
+.proj-stat-info { flex: 1; }
+.proj-stat-name { font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; color: var(--t1); }
+.proj-stat-sub { font-size: 11px; color: var(--t3); margin-top: 2px; font-family: 'Nunito', sans-serif; }
+.week-heatmap { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 4px; }
+.wh-day { text-align: center; }
+.wh-lbl { font-size: 10px; color: var(--t3); margin-bottom: 4px; font-family: 'Nunito', sans-serif; font-weight: 700; }
+.wh-bar-wrap { height: 60px; display: flex; align-items: flex-end; justify-content: center; }
+.wh-bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 3px; transition: height .5s cubic-bezier(.4,0,.2,1); }
+.wh-pct { font-size: 9px; color: var(--t3); margin-top: 4px; font-family: 'Space Mono', monospace; }
+
+@keyframes tabIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+.tab-anim { animation: tabIn .22s ease forwards; }
+
+@media (max-width: 480px) {
+  .page { padding: 10px 10px 70px; }
+  .card { padding: 14px 13px; border-radius: 16px; }
+  .hdr { padding: 12px 12px 6px; }
+  .tnav { padding: 8px 10px 0; }
+  .tnav button { font-size: 10px; padding: 10px 2px 8px; }
+  .sub-tab { padding: 6px 12px; font-size: 11px; }
+  .cal-grid { font-size: 11px; }
+  .cd { min-height: 44px; padding: 4px 2px; }
+  .cd-num { font-size: 11px; }
+  .cw-label { font-size: 7px; width: 16px; }
+  .ch { font-size: 10px; padding: 6px 2px; }
+  .ring-outer svg { width: 180px; height: 180px; }
+  .ring-time { font-size: 36px; }
+  .proj-add-task { flex-direction: column; }
+  .proj-date-inp { width: 100% !important; }
+  .habit-color-row { gap: 4px; }
+  .hb-col-btn { padding: 5px 6px; }
+  .hb-col-dot { width: 24px; height: 24px; }
+  .stats-row { gap: 16px; }
+  .stat-box { padding: 10px 14px; }
+  .day-sel { gap: 3px; }
+  .day-btn { min-width: 30px; padding: 0 6px; font-size: 11px; }
+  .add-row { flex-wrap: wrap; }
+  .frow { gap: 4px; }
+  .login-badge span.name { display: none; }
+}
+
+body.dark .goals-box { background: var(--lav-xs); }
+body.dark .goal-item { background: var(--s2); }
+body.dark .proj-new-card { background: var(--s2); }
+body.dark .proj-memo { background: var(--s2); color: var(--t1); }
+body.dark .proj-memo:focus { background: var(--s1); border-color: var(--lav-soft); }
+body.dark .ptask { background: var(--s2); }
+body.dark .hb-col-btn:hover { background: var(--lav-xs); }
+body.dark .ev-panel { background: var(--s2); }
+body.dark .ev-item { background: var(--s1); }
+body.dark .pri-menu { background: var(--s2); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div class="sync-toast" id="syncToast"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+  <!-- Firebase SDK: jsdelivr CDN (더 안정적) -->
+  <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.0/firebase-app-compat.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.0/firebase-auth-compat.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/firebase@10.7.0/firebase-firestore-compat.min.js"></script>
+  <script>
+// ===== FIREBASE 초기화 =====
+if (typeof firebase === 'undefined') {
+  alert('Firebase SDK 로드 실패!\n인터넷 연결을 확인하거나 브라우저를 새로고침 해주세요.');
+  throw new Error('Firebase SDK not loaded');
+}
+const firebaseConfig = {
+  apiKey: "AIzaSyCWQHApG7JGVbIrc19Y6XFUqc-urFmPpKE",
+  authDomain: "my-assisance-ver-2.firebaseapp.com",
+  projectId: "my-assisance-ver-2",
+  storageBucket: "my-assisance-ver-2.firebasestorage.app",
+  messagingSenderId: "374421863733",
+  appId: "1:374421863733:web:f74993c3cb4082bd3b607c",
+  measurementId: "G-RQDRVKGG3Q"
+};
+firebase.initializeApp(firebaseConfig);
+const _auth = firebase.auth();
+const _db = firebase.firestore();
+
+const SYNC_KEYS = [
+  "todos","tidSeq","habits","hbSeq","habitLog","dailyProgress",
+  "sharedEvs","evSeq","weekGoals","wgSeq","monthGoals","mgSeq",
+  "projects","projSeq","ptaskSeq","projMemos","timerCats","catSeq","stepSeq","darkMode"
+];
+
+function showToast(msg) {
+  const el = document.getElementById("syncToast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2500);
+}
+
+async function syncPush(uid) {
+  const data = {};
+  SYNC_KEYS.forEach(k => {
+    try { const v = localStorage.getItem(k); if (v !== null) data[k] = JSON.parse(v); } catch{}
+  });
+  data._updatedAt = Date.now();
+  await _db.collection("users").doc(uid).set(data);
+  showToast("☁️ 저장 완료!");
+}
+
+async function syncPull(uid) {
+  if (sessionStorage.getItem('_synced')) return;
+  sessionStorage.setItem('_synced', '1');
+  try {
+    const doc = await _db.collection("users").doc(uid).get();
+    if (doc.exists) {
+      const data = doc.data();
+      SYNC_KEYS.forEach(k => { if (data[k] != null) localStorage.setItem(k, JSON.stringify(data[k])); });
+      showToast("✅ 데이터 불러오기 완료!");
+      setTimeout(() => window.location.reload(), 800);
+    } else {
+      showToast("☁️ 새 계정입니다. 데이터를 저장해주세요!");
+    }
+  } catch(e) { sessionStorage.removeItem('_synced'); }
+}
+
+function googleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  _auth.signInWithPopup(provider).catch(e => alert("로그인 실패: " + e.message));
+}
+
+function googleLogout() {
+  sessionStorage.removeItem('_synced');
+  _auth.signOut().then(() => showToast("로그아웃 완료"));
+}
+
+_auth.onAuthStateChanged(user => {
+  if (user) syncPull(user.uid);
+  if (window.__forceAuthUpdate) window.__forceAuthUpdate(user);
+});
+// ===== FIREBASE 초기화 끝 =====
+
+// ===== 날짜 리셋 (자정 이후 완료된 할일 초기화) =====
+(function() {
+  const d = new Date();
+  const todayStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  const lastDate = localStorage.getItem('_lastActiveDate');
+  if (lastDate && lastDate !== todayStr) {
+    try {
+      const todos = JSON.parse(localStorage.getItem('todos') || '[]');
+      localStorage.setItem('todos', JSON.stringify(todos.filter(t => !t.done)));
+    } catch(e) {}
+  }
+  localStorage.setItem('_lastActiveDate', todayStr);
+})();
+// ===== 날짜 리셋 끝 =====
+  </script>
+  <script>
+(() => {
+  const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+  function Sparkles({ size = 16, strokeWidth = 2 }) {
+    return React.createElement("svg",{width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth,strokeLinecap:"round",strokeLinejoin:"round"},
+      React.createElement("path",{d:"M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"}),
+      React.createElement("path",{d:"M19 14l.8 2.4L22 17l-2.2.6L19 20l-.8-2.4L16 17l2.2-.6L19 14z"}),
+      React.createElement("path",{d:"M5 16l.6 1.8L7 18l-1.4.4L5 20l-.6-1.8L3 18l1.4-.4L5 16z"})
+    );
+  }
+  function Target({ size = 16, strokeWidth = 2 }) {
+    return React.createElement("svg",{width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth,strokeLinecap:"round",strokeLinejoin:"round"},
+      React.createElement("circle",{cx:"12",cy:"12",r:"10"}),
+      React.createElement("circle",{cx:"12",cy:"12",r:"6"}),
+      React.createElement("circle",{cx:"12",cy:"12",r:"2"})
+    );
+  }
+
+  const WD = ["일","월","화","수","목","금","토"];
+  const SC = ["#f3b5be","#f5cfae","#ecd9a3","#b6dec6","#b8d2ee","#d4c2ee"];
+  const SC_NAMES = ["파스텔 빨강","파스텔 주황","파스텔 노랑","파스텔 초록","파스텔 파랑","파스텔 보라"];
+  const SLOTS = [{key:"새벽",label:"새벽"},{key:"아침",label:"아침"},{key:"점심",label:"점심"},{key:"저녁",label:"저녁"}];
+  const HOLIDAYS = {
+    "2025-01-01":"신정","2025-01-28":"설날연휴","2025-01-29":"설날","2025-01-30":"설날연휴",
+    "2025-03-01":"삼일절","2025-05-05":"어린이날·부처님오신날","2025-06-06":"현충일",
+    "2025-08-15":"광복절","2025-10-03":"개천절","2025-10-05":"추석연휴","2025-10-06":"추석","2025-10-07":"추석연휴",
+    "2025-10-09":"한글날","2025-12-25":"성탄절",
+    "2026-01-01":"신정","2026-02-16":"설날연휴","2026-02-17":"설날","2026-02-18":"설날연휴",
+    "2026-03-01":"삼일절","2026-05-05":"어린이날","2026-05-24":"부처님오신날","2026-06-06":"현충일",
+    "2026-08-15":"광복절","2026-09-24":"추석연휴","2026-09-25":"추석","2026-09-26":"추석연휴",
+    "2026-10-03":"개천절","2026-10-09":"한글날","2026-12-25":"성탄절",
+  };
+  const HABIT_COLORS = [
+    {hex:"#f3b5be",label:"빨강"},{hex:"#f5cfae",label:"주황"},{hex:"#ecd9a3",label:"노랑"},
+    {hex:"#b6dec6",label:"초록"},{hex:"#b8d2ee",label:"파랑"},{hex:"#d4c2ee",label:"보라"},
+  ];
+
+  function fmt(d) {
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  }
+  function useLocalStorage(key, initial) {
+    const [value, setValue] = useState(() => {
+      try { const r = window.localStorage.getItem(key); return r===null?initial:JSON.parse(r); } catch { return initial; }
+    });
+    useEffect(() => {
+      try { window.localStorage.setItem(key, JSON.stringify(value)); } catch {}
+    }, [key, value]);
+    return [value, setValue];
+  }
+
+  const LblIcon = () => React.createElement(Sparkles,{size:15,strokeWidth:2});
+  const PORD = {r:0,o:1,y:2,g:3,b:4,p:5};
+  const PRI_KEYS = ["r","o","y","g","b","p"];
+  const PRI_COLOR = {r:"var(--red)",o:"var(--ora)",y:"var(--ylw)",g:"var(--grn)",b:"var(--blu)",p:"var(--pur)"};
+  const PRI_LABEL = {r:"빨강",o:"주황",y:"노랑",g:"초록",b:"파랑",p:"보라"};
+  function migPri(p) {
+    if(p==="h")return"r"; if(p==="m")return"y"; if(p==="l")return"g";
+    if(["r","o","y","g","b","p"].includes(p))return p; return"y";
+  }
+
+  function DailyTab({habits,setHabits,habitLog,setHabitLog,setDailyProgress,today,projects,setProjects}) {
+    const [todos,setTodos]=useLocalStorage("todos",[]);
+    const [tidSeq,setTidSeq]=useLocalStorage("tidSeq",1);
+    const [tIn,setTIn]=useState("");
+    const [tPr,setTPr]=useState("y");
+    const [filter,setFilter]=useState("all");
+    const [priOpen,setPriOpen]=useState(false);
+    const [filterColorOpen,setFilterColorOpen]=useState(false);
+    const [editingId,setEditingId]=useState(null);
+    const [editValue,setEditValue]=useState("");
+    const editRef=useRef(null);
+    const [expandedTodoId,setExpandedTodoId]=useState(null);
+    const [hbName,setHbName]=useState("");
+    const [hbIcon,setHbIcon]=useState("");
+    const [hbAllday,setHbAllday]=useState(false);
+    const [hbTime,setHbTime]=useState("");
+    const [hbSlot,setHbSlot]=useState("");
+    const [hbColor,setHbColor]=useState(HABIT_COLORS[5].hex);
+    const [selDays,setSelDays]=useState([0,1,2,3,4,5,6]);
+    const [hbSeq,setHbSeq]=useLocalStorage("hbSeq",1);
+    const [editingHabitId,setEditingHabitId]=useState(null);
+    const [hbEdit,setHbEdit]=useState({name:"",icon:"",allday:false,time:""});
+
+    const sorted=useMemo(()=>todos.slice().sort((a,b)=>PORD[migPri(a.pri)]-PORD[migPri(b.pri)]),[todos]);
+    const filtered=useMemo(()=>{
+      if(filter==="act")return sorted.filter(t=>!t.done);
+      if(filter==="dn")return sorted.filter(t=>t.done);
+      if(filter==="all")return sorted;
+      return sorted.filter(t=>migPri(t.pri)===filter);
+    },[sorted,filter]);
+
+    const tot=todos.length,dn=todos.filter(t=>t.done).length,pct=tot?Math.round(dn/tot*100):0;
+    const prevPctRef=useRef(pct);
+    const [bouncing,setBouncing]=useState(false);
+    useEffect(()=>{
+      if(prevPctRef.current!==pct){setBouncing(false);const id=requestAnimationFrame(()=>setBouncing(true));prevPctRef.current=pct;return()=>cancelAnimationFrame(id);}
+    },[pct]);
+    useEffect(()=>{setDailyProgress(prev=>({...prev,[today]:pct}));},[pct,today]);
+    useEffect(()=>{if(editingId!==null&&editRef.current){editRef.current.focus();editRef.current.select();}},[editingId]);
+
+    function addTodo(){const v=tIn.trim();if(!v)return;setTodos(prev=>[...prev,{id:tidSeq,text:v,pri:tPr,done:false}]);setTidSeq(s=>s+1);setTIn("");}
+    function tog(id){setTodos(prev=>prev.map(t=>t.id===id?{...t,done:!t.done}:t));}
+    function del(id){setTodos(prev=>prev.filter(t=>t.id!==id));setEditingId(null);}
+    function startEdit(t){setEditingId(t.id);setEditValue(t.text);}
+    function saveEdit(id){if(editValue.trim())setTodos(prev=>prev.map(t=>t.id===id?{...t,text:editValue.trim()}:t));setEditingId(null);}
+
+    let cardBg="#ffffff",cardShadow="var(--shadow)";
+    if(pct>=100){cardBg="linear-gradient(135deg,#cfc5f5,#b8b0e8)";cardShadow="0 8px 28px rgba(104,88,170,.28)";}
+    else if(pct>=75){cardBg="linear-gradient(135deg,#e0d8f8 20%,#cfc5f5)";cardShadow="0 6px 24px rgba(136,120,204,.22)";}
+    else if(pct>=50){cardBg="linear-gradient(135deg,#edeafc 30%,#e0d8f8)";cardShadow="0 4px 20px rgba(136,120,204,.18)";}
+    else if(pct>=25){cardBg="linear-gradient(135deg,#f5f3ff 40%,#edeafc)";cardShadow="0 4px 20px rgba(136,120,204,.12)";}
+    const pctColor=pct===0?"var(--t3)":pct<50?"var(--lav-soft)":pct<100?"var(--lav)":"#6858aa";
+
+    function getHabitsForDate(ds){const dow=(new Date(ds+"T00:00:00")).getDay();return habits.filter(h=>h.days.includes(dow));}
+    function toggleHabitLog(hid,ds){setHabitLog(prev=>{const arr=prev[ds]?[...prev[ds]]:[];const i=arr.indexOf(hid);if(i>=0)arr.splice(i,1);else arr.push(hid);return{...prev,[ds]:arr};});}
+    function addHabit(){const name=hbName.trim();const icon=hbIcon.trim()||"✅";if(!name||!selDays.length)return;setHabits(prev=>[...prev,{id:hbSeq,name,icon,days:[...selDays],time:hbAllday?"":(hbSlot||hbTime),allday:hbAllday,color:hbColor}]);setHbSeq(s=>s+1);setHbName("");setHbIcon("");setHbTime("");setHbSlot("");}
+    function delHabit(id){setHabits(prev=>prev.filter(h=>h.id!==id));setEditingHabitId(null);}
+    function startEditHabit(h){setEditingHabitId(h.id);setHbEdit({name:h.name,icon:h.icon,allday:h.allday,time:h.time});}
+    function saveEditHabit(id){setHabits(prev=>prev.map(h=>h.id===id?{...h,name:hbEdit.name.trim()||h.name,icon:hbEdit.icon.trim()||h.icon,allday:hbEdit.allday,time:hbEdit.allday?"":hbEdit.time}:h));setEditingHabitId(null);}
+    function getStreak(h){let s=0;const d=new Date();for(let i=0;i<365;i++){const ds=fmt(d);const dow=d.getDay();if(h.days.includes(dow)){if((habitLog[ds]||[]).includes(h.id))s++;else if(ds!==today)break;}d.setDate(d.getDate()-1);}return s;}
+
+    const todayHabits=getHabitsForDate(today).slice().sort((a,b)=>{if(a.allday&&!b.allday)return -1;if(!a.allday&&b.allday)return 1;return(a.time||"").localeCompare(b.time||"");});
+
+    return React.createElement(React.Fragment,null,
+      React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"lbl"},React.createElement(LblIcon)," 오늘 할 일"),
+        React.createElement("div",{className:"add-row"},
+          React.createElement("input",{placeholder:"할 일 입력...",value:tIn,onChange:e=>setTIn(e.target.value),onKeyDown:e=>e.key==="Enter"&&addTodo()}),
+          React.createElement("div",{className:"pri-picker"},
+            React.createElement("button",{type:"button",className:"pri-trigger",onClick:()=>setPriOpen(v=>!v)},
+              React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[tPr]}}),
+              React.createElement("span",{className:"caret"},"▼")
+            ),
+            priOpen&&React.createElement("div",{className:"pri-menu",onMouseLeave:()=>setPriOpen(false)},
+              PRI_KEYS.map(k=>React.createElement("button",{key:k,type:"button",className:`pri-opt${tPr===k?" sel":""}`,title:PRI_LABEL[k],onClick:()=>{setTPr(k);setPriOpen(false);}},
+                React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[k]}})
+              ))
+            )
+          ),
+          React.createElement("button",{className:"btn btn-sm",onClick:addTodo},"추가")
+        ),
+        React.createElement("div",{className:"frow"},
+          [["all","전체"],["act","미완료"],["dn","완료"]].map(([f,label])=>
+            React.createElement("button",{key:f,className:`btn btn-g btn-sm${filter===f?" on":""}`,onClick:()=>setFilter(f)},label)
+          ),
+          React.createElement("div",{className:"pri-picker"},
+            React.createElement("button",{type:"button",className:`pri-trigger${PRI_KEYS.includes(filter)?" on":""}`,onClick:()=>setFilterColorOpen(v=>!v)},
+              PRI_KEYS.includes(filter)
+                ?React.createElement(React.Fragment,null,React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[filter]}}),React.createElement("span",null,PRI_LABEL[filter]))
+                :React.createElement("span",null,"색상"),
+              React.createElement("span",{className:"caret"},"▼")
+            ),
+            filterColorOpen&&React.createElement("div",{className:"pri-menu",onMouseLeave:()=>setFilterColorOpen(false)},
+              PRI_KEYS.map(k=>React.createElement("button",{key:k,type:"button",className:`pri-opt${filter===k?" sel":""}`,title:PRI_LABEL[k],onClick:()=>{setFilter(k);setFilterColorOpen(false);}},
+                React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[k]}})
+              ))
+            )
+          )
+        ),
+        React.createElement("div",null,filtered.length?filtered.map(t=>{
+          const isExpanded=expandedTodoId===t.id;
+          return React.createElement("div",{key:t.id},
+            React.createElement("div",{className:`ti p${migPri(t.pri)}${t.done?" dn":""}`},
+              React.createElement("div",{className:`chk${t.done?" on":""}`,onClick:()=>tog(t.id)},t.done?"✓":""),
+              editingId===t.id
+                ?React.createElement("div",{className:"ti-edit"},
+                    React.createElement("input",{ref:editRef,value:editValue,onChange:e=>setEditValue(e.target.value),onKeyDown:e=>{if(e.key==="Enter")saveEdit(t.id);if(e.key==="Escape")setEditingId(null);}}),
+                    React.createElement("button",{className:"btn btn-sm",onClick:()=>saveEdit(t.id)},"저장")
+                  )
+                :React.createElement(React.Fragment,null,
+                    React.createElement("span",{className:"tt",style:{cursor:"default"}},t.text),
+                    React.createElement("button",{className:`ti-memo-btn${(t.memo||"").trim()?" has-memo":""}`,onClick:()=>setExpandedTodoId(isExpanded?null:t.id),title:"메모"},"✍️"),
+                    React.createElement("button",{className:"btn-icon",onClick:()=>startEdit(t)},"✏️"),
+                    React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:()=>del(t.id)},"×")
+                  )
+            ),
+            isExpanded&&React.createElement("div",{className:"ti-memo-area"},
+              React.createElement("textarea",{placeholder:"메모...",value:t.memo||"",rows:3,onChange:e=>setTodos(prev=>prev.map(x=>x.id===t.id?{...x,memo:e.target.value}:x))})
+            )
+          );
+        }):React.createElement("div",{className:"empty"},"할 일이 없어요 ✓",React.createElement("br"),React.createElement("span",{style:{fontSize:12}},"위에서 추가해보세요")))
+      ),
+      React.createElement("div",{className:"card prog-card",style:{background:cardBg,boxShadow:cardShadow}},
+        React.createElement("div",{className:"lbl"},React.createElement(LblIcon)," 진행률"),
+        React.createElement("div",{className:"prog-info"},
+          React.createElement("span",null,tot?`${dn}/${tot}개 완료`:"할 일을 추가해보세요"),
+          React.createElement("span",{className:`pPct${bouncing?" pct-bounce":""}`,style:{color:pctColor}},pct,"%")
+        ),
+        React.createElement("div",{className:"pbar"},React.createElement("div",{className:"pfill",style:{width:pct+"%"}}))
+      ),
+      (()=>{
+        const todayProjTasks=(projects||[]).flatMap(p=>p.tasks.filter(t=>!t.done&&((t.startDate&&t.endDate&&t.startDate<=today&&t.endDate>=today)||(t.endDate&&t.endDate===today)||(t.dueDate&&t.dueDate===today))).map(t=>({...t,projName:p.name,projIcon:p.icon,projColor:p.color,projId:p.id})));
+        if(!todayProjTasks.length)return null;
+        return React.createElement("div",{className:"card"},
+          React.createElement("div",{className:"lbl"},React.createElement(LblIcon)," 오늘 마감 프로젝트 할일"),
+          todayProjTasks.map(t=>React.createElement("div",{key:t.projId+"-"+t.id,className:"proj-task-row"},
+            React.createElement("div",{style:{width:8,height:8,borderRadius:"50%",background:t.projColor,flexShrink:0}}),
+            React.createElement("span",{style:{flex:1,fontSize:13}},t.text),
+            React.createElement("span",{className:"proj-task-source",style:{borderLeft:"3px solid "+(t.projColor||"var(--lav)")}},t.projIcon," ",t.projName),
+            React.createElement("button",{className:"btn btn-sm",style:{fontSize:11,padding:"4px 10px"},onClick:()=>setProjects(prev=>prev.map(p=>p.id===t.projId?{...p,tasks:p.tasks.map(tk=>tk.id===t.id?{...tk,done:true}:tk)}:p))},"✓")
+          ))
+        );
+      })(),
+      React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"lbl"},React.createElement(LblIcon)," 오늘의 습관"),
+        todayHabits.length?todayHabits.map(h=>{
+          const done=(habitLog[today]||[]).includes(h.id);
+          return React.createElement("div",{key:h.id,className:"habit-ev-row"},
+            React.createElement("div",{className:`chk${done?" on":""}`,style:{width:16,height:16,borderColor:h.color||"var(--pur)",background:done?(h.color||"var(--pur)"):void 0},onClick:()=>toggleHabitLog(h.id,today)},done?"✓":""),
+            React.createElement("div",{className:"ev-type-dot",style:{background:h.color||"var(--pur)"}}),
+            React.createElement("span",{className:"tt",style:{fontSize:13}},h.icon," ",h.name),
+            h.allday?React.createElement("span",{className:"day-pill",style:{background:(h.color||"#d4c2ee")+"44",color:"var(--t1)"}},"종일"):h.time?React.createElement("span",{style:{fontSize:11,color:"var(--t3)",fontFamily:"Space Mono, monospace"}},h.time):null
+          );
+        }):React.createElement("div",{style:{fontSize:12,color:"var(--t3)",padding:"4px 0"}},"오늘 예정된 습관이 없어요")
+      ),
+      habits.length>0&&React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"lbl"},"전체 습관"),
+        habits.map(h=>{
+          const streak=getStreak(h);
+          const last7=[];const now=new Date();
+          for(let j=6;j>=0;j--){const x=new Date(now);x.setDate(x.getDate()-j);last7.push(x);}
+          const isEditing=editingHabitId===h.id;
+          return React.createElement("div",{key:h.id,className:"habit-card",style:{borderLeftColor:h.color||"var(--lav)",background:(h.color||"#d4c2ee")+"18"}},
+            React.createElement("div",{className:"habit-head"},
+              React.createElement("div",{className:"habit-icon",style:{background:(h.color||"#d4c2ee")+"55"}},h.icon),
+              React.createElement("span",{className:"habit-name"},h.name),
+              React.createElement("div",{style:{textAlign:"right"}},
+                React.createElement("div",{className:"habit-streak",style:{color:h.color||"var(--lav)"}},"🔥 ",streak,"일"),
+                React.createElement("div",{className:"habit-streak-lbl"},"연속 달성")
+              )
+            ),
+            React.createElement("div",{className:"habit-grid"},last7.map((dd,j)=>{
+              const ds=fmt(dd);const dow=dd.getDay();
+              if(!h.days.includes(dow))return React.createElement("div",{className:"hg-day",key:j},React.createElement("div",{className:"hg-d"},WD[dow]),React.createElement("div",{className:"hg-dot",style:{background:"transparent",cursor:"default"}}));
+              const isDone=(habitLog[ds]||[]).includes(h.id);const isTd=ds===today;const isFuture=dd>new Date()&&!isTd;
+              return React.createElement("div",{className:"hg-day",key:j},
+                React.createElement("div",{className:"hg-d"},WD[dow]),
+                React.createElement("div",{className:`hg-dot${isDone?" done":""}${isTd?" today-dot":""}${isFuture?" future":""}`,onClick:()=>!isFuture&&toggleHabitLog(h.id,ds)},isDone?"✓":"")
+              );
+            })),
+            React.createElement("div",{className:"habit-days-row"},[0,1,2,3,4,5,6].map(d=>h.days.includes(d)?React.createElement("span",{className:"day-pill",key:d},WD[d]):null)),
+            isEditing&&React.createElement("div",{className:"habit-edit-form"},
+              React.createElement("div",{className:"row",style:{marginBottom:8,gap:7}},
+                React.createElement("input",{value:hbEdit.icon,onChange:e=>setHbEdit({...hbEdit,icon:e.target.value}),style:{width:60,flex:"none",textAlign:"center"}}),
+                React.createElement("input",{value:hbEdit.name,onChange:e=>setHbEdit({...hbEdit,name:e.target.value})})
+              ),
+              React.createElement("label",{style:{display:"flex",alignItems:"center",gap:7,fontSize:13,color:"var(--t2)",cursor:"pointer",marginBottom:8}},
+                React.createElement("input",{type:"checkbox",checked:hbEdit.allday,onChange:e=>setHbEdit({...hbEdit,allday:e.target.checked}),style:{width:14,height:14,accentColor:"var(--lav)"}}),
+                " 종일"
+              ),
+              !hbEdit.allday&&React.createElement("div",{className:"row",style:{marginBottom:10}},
+                React.createElement("span",{style:{fontSize:12,color:"var(--t3)",whiteSpace:"nowrap"}},"시간대"),
+                React.createElement("input",{type:"time",value:hbEdit.time,onChange:e=>setHbEdit({...hbEdit,time:e.target.value})})
+              ),
+              React.createElement("div",{className:"row"},
+                React.createElement("button",{className:"btn btn-sm",style:{flex:1},onClick:()=>saveEditHabit(h.id)},"저장"),
+                React.createElement("button",{className:"btn btn-g btn-sm",onClick:()=>setEditingHabitId(null)},"취소")
+              )
+            ),
+            React.createElement("div",{style:{display:"flex",justifyContent:"flex-end",gap:6}},
+              React.createElement("button",{className:"btn btn-g btn-sm",onClick:()=>startEditHabit(h)},"✏️ 수정"),
+              React.createElement("button",{className:"btn btn-sm",style:{background:"#fce8ea",color:"var(--red)"},onClick:()=>delHabit(h.id)},"🗑 삭제")
+            )
+          );
+        })
+      ),
+      React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"lbl"},React.createElement(LblIcon)," 새 습관 만들기"),
+        React.createElement("input",{placeholder:"습관 이름 (예: 물 2L 마시기)",value:hbName,onChange:e=>setHbName(e.target.value)}),
+        React.createElement("div",{className:"row",style:{margin:"8px 0"}},
+          React.createElement("input",{placeholder:"아이콘",value:hbIcon,onChange:e=>setHbIcon(e.target.value),style:{width:70,flex:"none",textAlign:"center"}}),
+          React.createElement("span",{style:{fontSize:12,color:"var(--t3)"}},"반복 요일")
+        ),
+        React.createElement("div",{className:"day-sel"},[0,1,2,3,4,5,6].map(d=>
+          React.createElement("button",{key:d,className:`day-btn${selDays.includes(d)?" on":""}`,onClick:()=>setSelDays(prev=>prev.includes(d)?prev.filter(x=>x!==d):[...prev,d])},WD[d])
+        )),
+        React.createElement("label",{className:"allday-toggle",style:{marginBottom:9}},
+          React.createElement("input",{type:"checkbox",checked:hbAllday,onChange:e=>setHbAllday(e.target.checked)}),
+          " 종일 습관"
+        ),
+        !hbAllday&&React.createElement(React.Fragment,null,
+          React.createElement("div",{style:{fontSize:12,color:"var(--t2)",marginBottom:6,fontWeight:600}},"시간대"),
+          React.createElement("div",{className:"slot-row",style:{marginBottom:10}},
+            SLOTS.map(s=>React.createElement("button",{key:s.key,className:"slot-btn"+(hbSlot===s.key?" on":""),onClick:()=>{setHbSlot(hbSlot===s.key?"":s.key);setHbTime("");}},s.label)),
+            React.createElement("input",{type:"time",value:hbTime,onChange:e=>{setHbTime(e.target.value);setHbSlot("");},style:{width:96,flex:"none",fontSize:12,padding:"3px 8px",background:"var(--s2)",border:"none",borderRadius:10,outline:"none",color:"var(--t1)"}})
+          )
+        ),
+        React.createElement("div",{style:{fontSize:12,color:"var(--t2)",marginBottom:8,fontWeight:600}},"습관 색상"),
+        React.createElement("div",{className:"habit-color-row"},
+          HABIT_COLORS.map(c=>React.createElement("button",{key:c.hex,className:"hb-col-btn"+(hbColor===c.hex?" sel":""),onClick:()=>setHbColor(c.hex)},
+            React.createElement("div",{className:"hb-col-dot",style:{background:c.hex}}),
+            React.createElement("span",{className:"hb-col-label"},c.label)
+          ))
+        ),
+        React.createElement("div",{className:"row"},
+          React.createElement("button",{className:"btn btn-g btn-sm",onClick:()=>setSelDays(prev=>prev.length===7?[]:[0,1,2,3,4,5,6])},selDays.length===7?"전체 해제":"전체 선택"),
+          React.createElement("button",{className:"btn",style:{flex:1},onClick:addHabit},"+ 습관 추가")
+        )
+      )
+    );
+  }
+
+  function useSharedEvents(){
+    const [sharedEvs,setSharedEvs]=useLocalStorage("sharedEvs",{});
+    const [evSeq,setEvSeq]=useLocalStorage("evSeq",500);
+    function add(ds,text,time,allday){setSharedEvs(prev=>({...prev,[ds]:[...prev[ds]||[],{id:evSeq,text,time,allday,done:false}]}));setEvSeq(s=>s+1);}
+    function del(ds,id){setSharedEvs(prev=>({...prev,[ds]:(prev[ds]||[]).filter(e=>e.id!==id)}));}
+    function tog(ds,id){setSharedEvs(prev=>({...prev,[ds]:(prev[ds]||[]).map(e=>e.id===id?{...e,done:!e.done}:e)}));}
+    function update(ds,id,text){setSharedEvs(prev=>({...prev,[ds]:(prev[ds]||[]).map(e=>e.id===id?{...e,text}:e)}));}
+    function get(ds){return sharedEvs[ds]||[];}
+    return{sharedEvs,get,add,del,tog,update};
+  }
+
+  function WeeklyTab({habits,habitLog,toggleHabitLog,shared,today}){
+    const [weekOffset,setWeekOffset]=useState(0);
+    const [weekGoals,setWeekGoals]=useLocalStorage("weekGoals",{});
+    const [wgSeq,setWgSeq]=useLocalStorage("wgSeq",1);
+    const [wgIn,setWgIn]=useState("");
+    const [editingEv,setEditingEv]=useState(null);
+    const [editValue,setEditValue]=useState("");
+    const [addState,setAddState]=useState({});
+    function getAdd(ds){return addState[ds]||{text:"",time:"",slot:"",allday:false};}
+    function setAdd(ds,patch){setAddState(prev=>({...prev,[ds]:{...getAdd(ds),...patch}}));}
+    function getWeekStart(off){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-d.getDay()+off*7);return d;}
+    const start=getWeekStart(weekOffset);const end=new Date(start);end.setDate(end.getDate()+6);
+    const weekKey=fmt(start);
+    function addWGoal(){const v=wgIn.trim();if(!v)return;setWeekGoals(prev=>({...prev,[weekKey]:[...prev[weekKey]||[],{id:wgSeq,text:v,done:false}]}));setWgSeq(s=>s+1);setWgIn("");}
+    function togWGoal(id){setWeekGoals(prev=>({...prev,[weekKey]:(prev[weekKey]||[]).map(g=>g.id===id?{...g,done:!g.done}:g)}));}
+    function delWGoal(id){setWeekGoals(prev=>({...prev,[weekKey]:(prev[weekKey]||[]).filter(g=>g.id!==id)}));}
+    function getHabitsForDate(ds){const dow=(new Date(ds+"T00:00:00")).getDay();return habits.filter(h=>h.days.includes(dow));}
+    const goals=weekGoals[weekKey]||[];
+    return React.createElement("div",{className:"card"},
+      React.createElement("div",{className:"week-nav"},
+        React.createElement("button",{className:"wnb",onClick:()=>setWeekOffset(o=>o-1)},"‹"),
+        React.createElement("span",{className:"week-title"},start.getMonth()+1,"/",start.getDate()," — ",end.getMonth()+1,"/",end.getDate()),
+        React.createElement("button",{className:"wnb",onClick:()=>setWeekOffset(o=>o+1)},"›")
+      ),
+      React.createElement("div",{className:"goals-box"},
+        React.createElement("div",{className:"lbl"},React.createElement(Target,{size:15,strokeWidth:2})," 이번 주 목표"),
+        goals.length?goals.map(g=>React.createElement("div",{key:g.id,className:`goal-item${g.done?" done":""}`},
+          React.createElement("div",{className:`goal-chk${g.done?" on":""}`,onClick:()=>togWGoal(g.id)},g.done?"✓":""),
+          React.createElement("span",{className:"goal-txt"},g.text),
+          React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:()=>delWGoal(g.id)},"×")
+        )):React.createElement("div",{style:{fontSize:12,color:"var(--t3)",padding:"4px 0"}},"아직 목표가 없어요"),
+        React.createElement("div",{className:"goal-add"},
+          React.createElement("input",{placeholder:"이번 주 목표 추가...",value:wgIn,onChange:e=>setWgIn(e.target.value),onKeyDown:e=>e.key==="Enter"&&addWGoal()}),
+          React.createElement("button",{className:"btn btn-sm",onClick:addWGoal},"추가")
+        )
+      ),
+      Array.from({length:7}).map((_,i)=>{
+        const d=new Date(start);d.setDate(d.getDate()+i);const ds=fmt(d);const isToday=ds===today;
+        const evs=shared.get(ds);const dayHabits=getHabitsForDate(ds);const a=getAdd(ds);
+        return React.createElement("div",{className:"day-col",key:ds},
+          React.createElement("div",{className:"day-head"},
+            React.createElement("span",{className:`day-name${isToday?" td":""}`},WD[d.getDay()],"요일",isToday?" ✦":""),
+            React.createElement("span",{className:"day-date-lbl"},d.getMonth()+1,"/",d.getDate())
+          ),
+          React.createElement("div",null,
+            !evs.length&&!dayHabits.length
+              ?React.createElement("div",{style:{fontSize:12,color:"var(--t3)",padding:"3px 0"}},"일정 없음")
+              :React.createElement(React.Fragment,null,
+                evs.map(e=>{
+                  const editing=editingEv&&editingEv.ds===ds&&editingEv.id===e.id;
+                  return React.createElement("div",{key:e.id,className:`day-ev${e.done?" dn":""}`},
+                    React.createElement("div",{className:`chk${e.done?" on":""}`,style:{width:16,height:16},onClick:()=>shared.tog(ds,e.id)},e.done?"✓":""),
+                    React.createElement("div",{className:"ev-type-dot",style:{background:e.allday?"var(--blu)":"var(--lav)"}}),
+                    editing
+                      ?React.createElement("div",{className:"day-ev-edit"},
+                          React.createElement("input",{autoFocus:true,value:editValue,onChange:ev=>setEditValue(ev.target.value),onKeyDown:ev=>{if(ev.key==="Enter"){if(editValue.trim())shared.update(ds,e.id,editValue.trim());setEditingEv(null);}if(ev.key==="Escape")setEditingEv(null);}}),
+                          React.createElement("button",{className:"btn btn-sm",onClick:()=>{if(editValue.trim())shared.update(ds,e.id,editValue.trim());setEditingEv(null);}},"저장")
+                        )
+                      :React.createElement(React.Fragment,null,
+                          React.createElement("span",{className:"tt",style:{fontSize:13}},e.text,e.time&&React.createElement("span",{style:{fontSize:10,color:"var(--t3)",marginLeft:6}},e.time)),
+                          React.createElement("button",{className:"btn-icon",onClick:()=>{setEditingEv({ds,id:e.id});setEditValue(e.text);}},"✏️"),
+                          React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:()=>shared.del(ds,e.id)},"×")
+                        )
+                  );
+                }),
+                dayHabits.length>0&&React.createElement(React.Fragment,null,
+                  React.createElement("div",{className:"habit-section-lbl"},"HABITS"),
+                  dayHabits.map(h=>{
+                    const done=(habitLog[ds]||[]).includes(h.id);
+                    const isFuture=new Date(ds+"T00:00:00")>new Date()&&ds!==today;
+                    return React.createElement("div",{className:"habit-ev-row",key:h.id},
+                      React.createElement("div",{className:`chk${done?" on":""}`,style:{width:16,height:16,borderColor:"var(--pur)",background:done?"var(--pur)":void 0},onClick:()=>!isFuture&&toggleHabitLog(h.id,ds)},done?"✓":""),
+                      React.createElement("div",{className:"ev-type-dot",style:{background:"var(--pur)"}}),
+                      React.createElement("span",{className:"tt",style:{fontSize:13}},h.icon," ",h.name),
+                      h.allday?React.createElement("span",{className:"day-pill",style:{background:"#f9f4ff",color:"var(--pur)"}},"종일"):h.time?React.createElement("span",{style:{fontSize:10,color:"var(--t3)"}},h.time):null
+                    );
+                  })
+                )
+              )
+          ),
+          React.createElement("div",{style:{marginTop:8}},
+            React.createElement("label",{style:{display:"flex",alignItems:"center",gap:6,fontSize:12,color:"var(--t2)",marginBottom:6,cursor:"pointer"}},
+              React.createElement("input",{type:"checkbox",checked:a.allday,onChange:e=>setAdd(ds,{allday:e.target.checked}),style:{width:13,height:13,accentColor:"var(--lav)"}}),
+              " 종일"
+            ),
+            !a.allday&&React.createElement("div",{className:"slot-row"},
+              SLOTS.map(s=>React.createElement("button",{key:s.key,className:"slot-btn"+(a.slot===s.key?" on":""),onClick:()=>setAdd(ds,{slot:a.slot===s.key?"":s.key,time:""})},s.label)),
+              React.createElement("input",{type:"time",value:a.time,onChange:e=>setAdd(ds,{time:e.target.value,slot:""}),style:{width:96,flex:"none",fontSize:11,padding:"3px 7px",background:"var(--s2)",border:"none",borderRadius:10,outline:"none",color:"var(--t1)"}})
+            ),
+            React.createElement("div",{className:"day-add-row"},
+              React.createElement("input",{placeholder:"일정 추가...",value:a.text,onChange:e=>setAdd(ds,{text:e.target.value}),onKeyDown:e=>{if(e.key==="Enter"&&a.text.trim()){shared.add(ds,a.text.trim(),a.allday?"":(a.slot||a.time),a.allday);setAdd(ds,{text:"",time:"",slot:"",allday:false});}}}),
+              React.createElement("button",{className:"btn btn-sm",onClick:()=>{if(!a.text.trim())return;shared.add(ds,a.text.trim(),a.allday?"":(a.slot||a.time),a.allday);setAdd(ds,{text:"",time:"",slot:"",allday:false});}},"+")
+            )
+          )
+        );
+      })
+    );
+  }
+
+  function MonthlyTab({habits,habitLog,toggleHabitLog,shared,dailyProgress,today}){
+    const now=new Date();
+    const [cY,setCY]=useState(now.getFullYear());
+    const [cM,setCM]=useState(now.getMonth());
+    const [selD,setSelD]=useState(null);
+    const [monthGoals,setMonthGoals]=useLocalStorage("monthGoals",{});
+    const [mgSeq,setMgSeq]=useLocalStorage("mgSeq",1);
+    const [mgIn,setMgIn]=useState("");
+    const [allday,setAllday]=useState(false);
+    const [evSlot,setEvSlot]=useState("");
+    const [evTime,setEvTime]=useState("");
+    const [evTxt,setEvTxt]=useState("");
+    const [evTxtA,setEvTxtA]=useState("");
+    const [editingEv,setEditingEv]=useState(null);
+    const [editValue,setEditValue]=useState("");
+    const mKey=cY+"-"+String(cM+1).padStart(2,"0");
+    const goals=monthGoals[mKey]||[];
+    function addMGoal(){const v=mgIn.trim();if(!v)return;setMonthGoals(prev=>({...prev,[mKey]:[...prev[mKey]||[],{id:mgSeq,text:v,done:false}]}));setMgSeq(s=>s+1);setMgIn("");}
+    function togMGoal(id){setMonthGoals(prev=>({...prev,[mKey]:(prev[mKey]||[]).map(g=>g.id===id?{...g,done:!g.done}:g)}));}
+    function delMGoal(id){setMonthGoals(prev=>({...prev,[mKey]:(prev[mKey]||[]).filter(g=>g.id!==id)}));}
+    function chM(d){let nm=cM+d,ny=cY;if(nm>11){nm=0;ny++;}if(nm<0){nm=11;ny--;}setCM(nm);setCY(ny);setSelD(null);setEditingEv(null);}
+    function getHabitsForDate(ds){const dow=(new Date(ds+"T00:00:00")).getDay();return habits.filter(h=>h.days.includes(dow));}
+    const rows=useMemo(()=>{
+      const flat=[];const firstDow=new Date(cY,cM,1).getDay();const lastDay=new Date(cY,cM+1,0).getDate();const prevLast=new Date(cY,cM,0).getDate();
+      for(let i=0;i<firstDow;i++)flat.push({key:"p"+i,day:prevLast-firstDow+i+1,ds:null,other:true});
+      for(let d=1;d<=lastDay;d++)flat.push({key:"d"+d,day:d,ds:fmt(new Date(cY,cM,d)),other:false});
+      const rem=(7-(firstDow+lastDay)%7)%7;
+      for(let i=1;i<=rem;i++)flat.push({key:"n"+i,day:i,ds:null,other:true});
+      const result=[];for(let i=0;i<flat.length;i+=7)result.push(flat.slice(i,i+7));return result;
+    },[cY,cM]);
+    function addEv(){if(!selD)return;const text=(allday?evTxtA:evTxt).trim();if(!text)return;shared.add(selD,text,allday?"":(evSlot||evTime),allday);if(allday)setEvTxtA("");else setEvTxt("");}
+    const evs=selD?shared.get(selD).slice().sort((a,b)=>{if(a.allday&&!b.allday)return -1;if(!a.allday&&b.allday)return 1;return a.time.localeCompare(b.time);}):[];
+    const selHabits=selD?getHabitsForDate(selD):[];
+    return React.createElement(React.Fragment,null,
+      React.createElement("div",{className:"goals-box"},
+        React.createElement("div",{className:"lbl"},React.createElement(Target,{size:15,strokeWidth:2})," 이번 달 목표"),
+        goals.length?goals.map(g=>React.createElement("div",{key:g.id,className:`goal-item${g.done?" done":""}`},
+          React.createElement("div",{className:`goal-chk${g.done?" on":""}`,onClick:()=>togMGoal(g.id)},g.done?"✓":""),
+          React.createElement("span",{className:"goal-txt"},g.text),
+          React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:()=>delMGoal(g.id)},"×")
+        )):React.createElement("div",{style:{fontSize:12,color:"var(--t3)",padding:"4px 0"}},"아직 목표가 없어요"),
+        React.createElement("div",{className:"goal-add"},
+          React.createElement("input",{placeholder:"이번 달 목표 추가...",value:mgIn,onChange:e=>setMgIn(e.target.value),onKeyDown:e=>e.key==="Enter"&&addMGoal()}),
+          React.createElement("button",{className:"btn btn-sm",onClick:addMGoal},"추가")
+        )
+      ),
+      React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"cal-nav"},
+          React.createElement("button",{className:"cnb",onClick:()=>chM(-1)},"‹"),
+          React.createElement("div",{className:"cal-title"},cY,"년 ",cM+1,"월"),
+          React.createElement("button",{className:"cnb",onClick:()=>chM(1)},"›")
+        ),
+        React.createElement("div",{className:"cal-grid"},
+          React.createElement("div",{className:"ch-empty"}),
+          WD.map(d=>React.createElement("div",{className:"ch",key:d},d)),
+          rows.map((row,weekIdx)=>React.createElement(React.Fragment,{key:"w"+weekIdx},
+            React.createElement("div",{className:"cw-label"},(weekIdx+1)+"주"),
+            row.map(c=>{
+              if(c.other)return React.createElement("div",{className:"cd other",key:c.key},React.createElement("div",{className:"cd-num"},c.day),React.createElement("div",{className:"cd-dots"}));
+              const ds=c.ds;const hol=HOLIDAYS[ds];const arr=shared.get(ds);
+              const hasTimed=arr.some(e=>!e.allday);const hasAll=arr.some(e=>e.allday);const hasHabit=getHabitsForDate(ds).length>0;
+              const prog=dailyProgress[ds]||0;
+              let pCls="";
+              if(prog>0&&prog<25)pCls=" p1";else if(prog>=25&&prog<50)pCls=" p2";else if(prog>=50&&prog<75)pCls=" p3";else if(prog>=75&&prog<100)pCls=" p4";else if(prog>=100)pCls=" p5";
+              const cls="cd"+pCls+(selD===ds?" sel":"")+(hol?" is-hol":"");
+              const numCls="cd-num"+(ds===today?" today-num":"");
+              return React.createElement("div",{className:cls,key:c.key,onClick:()=>{setSelD(ds);setEditingEv(null);}},
+                React.createElement("div",{className:"cd-dots"},
+                  hasTimed&&React.createElement("div",{className:"edot timed"}),
+                  hasAll&&React.createElement("div",{className:"edot allday"}),
+                  hasHabit&&React.createElement("div",{className:"edot habit"})
+                ),
+                React.createElement("div",{className:numCls},c.day),
+                hol&&React.createElement("div",{className:"cd-hol"},hol)
+              );
+            })
+          ))
+        ),
+        selD&&React.createElement("div",{className:"ev-panel"},
+          React.createElement("div",{className:"ev-hdr"},(()=>{const d=new Date(selD+"T00:00:00");return`${d.getMonth()+1}월 ${d.getDate()}일 (${WD[d.getDay()]})`;})()),
+          React.createElement("div",{className:"ev-form"},
+            React.createElement("label",{className:"allday-toggle"},React.createElement("input",{type:"checkbox",checked:allday,onChange:e=>setAllday(e.target.checked)})," 종일 일정"),
+            !allday?React.createElement(React.Fragment,null,
+              React.createElement("div",{className:"slot-row"},
+                SLOTS.map(s=>React.createElement("button",{key:s.key,className:"slot-btn"+(evSlot===s.key?" on":""),onClick:()=>{setEvSlot(evSlot===s.key?"":s.key);setEvTime("");}},s.label)),
+                React.createElement("input",{type:"time",value:evTime,onChange:e=>{setEvTime(e.target.value);setEvSlot("");},style:{width:100,flex:"none",fontSize:12,padding:"3px 8px",background:"var(--s2)",border:"none",borderRadius:10,outline:"none",color:"var(--t1)"}})
+              ),
+              React.createElement("div",{className:"ev-form-row"},React.createElement("input",{placeholder:"일정 입력...",value:evTxt,onChange:e=>setEvTxt(e.target.value),onKeyDown:e=>e.key==="Enter"&&addEv()}))
+            ):React.createElement("div",{className:"ev-form-row"},React.createElement("input",{placeholder:"종일 일정 입력...",value:evTxtA,onChange:e=>setEvTxtA(e.target.value),onKeyDown:e=>e.key==="Enter"&&addEv()})),
+            React.createElement("button",{className:"btn btn-sm",onClick:addEv,style:{width:"100%",marginTop:6}},"+ 일정 추가")
+          ),
+          React.createElement("div",null,
+            evs.map(e=>{
+              const editing=editingEv===e.id;
+              return React.createElement("div",{key:e.id,className:`ev-item${e.done?" done-ev":""}`},
+                React.createElement("div",{className:`chk${e.done?" on":""}`,style:{width:16,height:16,flexShrink:0},onClick:()=>shared.tog(selD,e.id)},e.done?"✓":""),
+                e.allday?React.createElement("span",{className:"allday-tag"},"종일"):React.createElement("span",{className:"ev-time"},e.time||"--:--"),
+                editing
+                  ?React.createElement("div",{className:"ev-inline-edit"},
+                      React.createElement("input",{autoFocus:true,value:editValue,onChange:ev=>setEditValue(ev.target.value),onKeyDown:ev=>{if(ev.key==="Enter"){if(editValue.trim())shared.update(selD,e.id,editValue.trim());setEditingEv(null);}if(ev.key==="Escape")setEditingEv(null);}}),
+                      React.createElement("button",{className:"btn btn-sm",onClick:()=>{if(editValue.trim())shared.update(selD,e.id,editValue.trim());setEditingEv(null);}},"저장")
+                    )
+                  :React.createElement(React.Fragment,null,
+                      React.createElement("span",{className:"ev-txt"},e.text),
+                      React.createElement("button",{className:"btn-icon",onClick:()=>{setEditingEv(e.id);setEditValue(e.text);}},"✏️"),
+                      React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:()=>shared.del(selD,e.id)},"×")
+                    )
+              );
+            }),
+            selHabits.length>0&&React.createElement(React.Fragment,null,
+              React.createElement("div",{className:"habit-section-lbl"},"HABITS"),
+              selHabits.map(h=>{
+                const done=(habitLog[selD]||[]).includes(h.id);
+                const isFut=new Date(selD+"T00:00:00")>new Date()&&selD!==today;
+                return React.createElement("div",{className:"ev-item",style:{background:"#f9f4ff"},key:h.id},
+                  React.createElement("div",{className:`chk${done?" on":""}`,style:{width:16,height:16,flexShrink:0,borderColor:"var(--pur)",background:done?"var(--pur)":void 0},onClick:()=>!isFut&&toggleHabitLog(h.id,selD)},done?"✓":""),
+                  h.allday?React.createElement("span",{className:"allday-tag",style:{background:"#f0eaff",color:"var(--pur)"}},"종일"):React.createElement("span",{className:"ev-time",style:{color:"var(--pur)"}},h.time||"--:--"),
+                  React.createElement("span",{className:"ev-txt"},h.icon," ",h.name)
+                );
+              })
+            ),
+            !evs.length&&!selHabits.length&&React.createElement("div",{className:"empty"},"이 날 일정이 없어요")
+          )
+        )
+      )
+    );
+  }
+
+  const DEFAULT_CATS=[{id:1,name:"뽀모도로",icon:"🍅",steps:[{id:1,name:"집중",min:25,sec:0,color:"#8878cc"},{id:2,name:"짧은 휴식",min:5,sec:0,color:"#a898e8"},{id:3,name:"긴 휴식",min:15,sec:0,color:"#6858aa"}]}];
+
+  function TimerPage(){
+    const [cats,setCats]=useLocalStorage("timerCats",DEFAULT_CATS);
+    const [catSeq,setCatSeq]=useLocalStorage("catSeq",2);
+    const [stepSeq,setStepSeq]=useLocalStorage("stepSeq",10);
+    const [openCats,setOpenCats]=useState(new Set([1]));
+    const [editingCat,setEditingCat]=useState(null);
+    const [editingStep,setEditingStep]=useState(null);
+    const [newStepColor,setNewStepColor]=useState(SC[0]);
+    const [newCatName,setNewCatName]=useState("");
+    const [newCatIcon,setNewCatIcon]=useState("");
+    const [stepForms,setStepForms]=useState({});
+    function getSF(cid){return stepForms[cid]||{name:"",min:"",sec:""};}
+    function setSF(cid,p){setStepForms(prev=>({...prev,[cid]:{...getSF(cid),...p}}));}
+    const [catEdit,setCatEdit]=useState({name:"",icon:""});
+    const [stepEdit,setStepEdit]=useState({name:"",min:"",sec:""});
+    const [runCat,setRunCat]=useState(null);
+    const [runIdx,setRunIdx]=useState(0);
+    const [runSec,setRunSec]=useState(0);
+    const [runTotal,setRunTotal]=useState(0);
+    const [runOn,setRunOn]=useState(false);
+    const [runCnt,setRunCnt]=useState(0);
+    const [runFocSec,setRunFocSec]=useState(0);
+    const runEndAtRef=useRef(null);
+    const runIvRef=useRef(null);
+    const [vib,setVib]=useState(true);
+
+    function addCat(){const name=newCatName.trim();const icon=newCatIcon.trim()||"⏱";if(!name)return;setCats(prev=>[...prev,{id:catSeq,name,icon,steps:[]}]);setCatSeq(s=>s+1);setNewCatName("");setNewCatIcon("");}
+    function delCat(id){setCats(prev=>prev.filter(c=>c.id!==id));setOpenCats(prev=>{const n=new Set(prev);n.delete(id);return n;});}
+    function startEditCat(c){setEditingCat(c.id);setCatEdit({name:c.name,icon:c.icon});}
+    function saveEditCat(id){setCats(prev=>prev.map(c=>c.id===id?{...c,name:catEdit.name.trim()||c.name,icon:catEdit.icon.trim()||c.icon}:c));setEditingCat(null);}
+    function toggleCat(id){setOpenCats(prev=>{const n=new Set(prev);if(n.has(id))n.delete(id);else n.add(id);return n;});}
+    function addStep(cid){const f=getSF(cid);const n=f.name.trim()||"단계";const m=parseInt(f.min)||0;const s=parseInt(f.sec)||0;if(m===0&&s===0)return;setCats(prev=>prev.map(c=>c.id===cid?{...c,steps:[...c.steps,{id:stepSeq,name:n,min:m,sec:s,color:newStepColor}]}:c));setStepSeq(x=>x+1);setSF(cid,{name:"",min:"",sec:""});}
+    function delStep(cid,sid){setCats(prev=>prev.map(c=>c.id===cid?{...c,steps:c.steps.filter(s=>s.id!==sid)}:c));if(editingStep?.sid===sid)setEditingStep(null);}
+    function startEditStep(cid,sid){const cat=cats.find(c=>c.id===cid);const s=cat?.steps.find(x=>x.id===sid);if(!s)return;setEditingStep({cid,sid});setStepEdit({name:s.name,min:String(s.min),sec:String(s.sec)});}
+    function saveEditStep(cid,sid){setCats(prev=>prev.map(c=>c.id===cid?{...c,steps:c.steps.map(s=>s.id===sid?{...s,name:stepEdit.name.trim()||s.name,min:isNaN(+stepEdit.min)?s.min:+stepEdit.min,sec:isNaN(+stepEdit.sec)?s.sec:+stepEdit.sec}:s)}:c));setEditingStep(null);}
+    function startRun(cid){const cat=cats.find(c=>c.id===cid);if(!cat||!cat.steps.length)return;setRunCat(cat);setRunIdx(0);setRunCnt(0);setRunFocSec(0);setRunOn(false);if(runIvRef.current)clearInterval(runIvRef.current);runEndAtRef.current=null;const s=cat.steps[0];setRunSec(s.min*60+s.sec);setRunTotal(s.min*60+s.sec);}
+    function stopRun(){if(runIvRef.current)clearInterval(runIvRef.current);setRunOn(false);runEndAtRef.current=null;setRunCat(null);document.title="MY ASSISTANT";}
+    function toggleRun(){if(runOn){if(runIvRef.current)clearInterval(runIvRef.current);setRunOn(false);runEndAtRef.current=null;document.title="MY ASSISTANT";}else{if(!runCat)return;setRunOn(true);runEndAtRef.current=Date.now()+runSec*1000;}}
+    function resetStep(){if(!runCat)return;if(runIvRef.current)clearInterval(runIvRef.current);setRunOn(false);runEndAtRef.current=null;const s=runCat.steps[runIdx];setRunSec(s.min*60+s.sec);setRunTotal(s.min*60+s.sec);document.title="MY ASSISTANT";}
+    function goToStep(idx){if(idx<0||idx>=runCat.steps.length)return;setRunOn(false);runEndAtRef.current=null;setRunIdx(idx);const s=runCat.steps[idx];setRunSec(s.min*60+s.sec);setRunTotal(s.min*60+s.sec);document.title="MY ASSISTANT";}
+
+    useEffect(()=>{
+      if(!runOn||!runCat)return;
+      runEndAtRef.current=Date.now()+runSec*1000;
+      const iv=setInterval(()=>{
+        if(runEndAtRef.current===null)return;
+        const remain=Math.max(0,Math.round((runEndAtRef.current-Date.now())/1000));
+        setRunSec(remain);
+        const m=String(Math.floor(remain/60)).padStart(2,"0");
+        const sStr=String(remain%60).padStart(2,"0");
+        document.title=`⏱ ${m}:${sStr} · ${runCat.steps[runIdx]?.name||""}`;
+        if(remain<=0){
+          clearInterval(iv);setRunFocSec(f=>f+runTotal);
+          if(navigator.vibrate)navigator.vibrate([200,100,200,100,400]);
+          if(runIdx<runCat.steps.length-1){
+            const nextIdx=runIdx+1;setRunIdx(nextIdx);
+            const ns=runCat.steps[nextIdx];const total=ns.min*60+ns.sec;
+            setRunSec(total);setRunTotal(total);runEndAtRef.current=Date.now()+total*1000;setRunOn(true);
+          }else{
+            setRunCnt(c=>c+1);setRunIdx(0);const fs=runCat.steps[0];
+            setRunSec(fs.min*60+fs.sec);setRunTotal(fs.min*60+fs.sec);setRunOn(false);runEndAtRef.current=null;document.title="MY ASSISTANT";
+          }
+        }
+      },250);
+      runIvRef.current=iv;
+      return()=>clearInterval(iv);
+    },[runOn,runIdx,runCat?.id]);
+
+    const circ=603;const filled=runTotal>0?circ*(runSec/runTotal):0;
+    const ringColor=runCat?.steps[runIdx]?.color||SC[runIdx%SC.length];
+
+    if(runCat){
+      const m=String(Math.floor(runSec/60)).padStart(2,"0");const sStr=String(runSec%60).padStart(2,"0");
+      return React.createElement("div",null,
+        React.createElement("button",{className:"back-btn",onClick:stopRun},"← 타이머 목록으로"),
+        React.createElement("div",{className:"card"},
+          React.createElement("div",{className:"run-title"},runCat.icon," ",runCat.name),
+          React.createElement("div",{className:"run-sname"},runCat.steps[runIdx]?.name),
+          React.createElement("div",{className:"sp-progress"},runCat.steps.map((s,i)=>{let cls="sp-dot";if(i<runIdx)cls+=" d";else if(i===runIdx)cls+=" c";return React.createElement("div",{key:s.id,className:cls,title:s.name,onClick:()=>goToStep(i)});})),
+          React.createElement("div",{className:"ring-outer"},
+            React.createElement("svg",{width:"220",height:"220",viewBox:"0 0 220 220"},
+              React.createElement("circle",{fill:"none",stroke:"#ede9fc",strokeWidth:"10",cx:"110",cy:"110",r:"96"}),
+              React.createElement("circle",{fill:"none",stroke:ringColor,strokeWidth:"10",strokeLinecap:"round",cx:"110",cy:"110",r:"96",strokeDasharray:circ,strokeDashoffset:circ-filled})
+            ),
+            React.createElement("div",{className:"ring-center"},
+              React.createElement("div",{className:"ring-time"},m,":",sStr),
+              React.createElement("div",{className:"ring-lbl"},runIdx+1," / ",runCat.steps.length," 단계")
+            )
+          ),
+          React.createElement("div",{className:"pomo-btns"},
+            React.createElement("button",{className:"btn rst-btn btn-sm",onClick:resetStep},"↺ 리셋"),
+            React.createElement("button",{className:"btn",onClick:toggleRun,style:{minWidth:130}},runOn?"⏸ 일시정지":"▶ 시작")
+          ),
+          React.createElement("div",{className:"stats-row"},
+            React.createElement("div",{className:"stat-box"},React.createElement("div",{className:"stat-val"},runCnt),React.createElement("div",{className:"stat-lbl"},"완료 세트")),
+            React.createElement("div",{className:"stat-box"},React.createElement("div",{className:"stat-val"},Math.round(runFocSec/60),"분"),React.createElement("div",{className:"stat-lbl"},"총 집중 시간"))
+          )
+        )
+      );
+    }
+
+    return React.createElement(React.Fragment,null,
+      React.createElement("div",{className:"cat-list"},cats.map(cat=>{
+        const totSec=cat.steps.reduce((acc,s)=>acc+s.min*60+s.sec,0);
+        const isOpen=openCats.has(cat.id);const isEC=editingCat===cat.id;const sf=getSF(cat.id);
+        return React.createElement("div",{key:cat.id,className:`cat-card${isOpen?" open":""}`},
+          React.createElement("div",{className:"cat-head",onClick:()=>toggleCat(cat.id)},
+            React.createElement("div",{className:"cat-icon"},cat.icon),
+            React.createElement("span",{className:"cat-name-txt"},cat.name),
+            React.createElement("span",{className:"cat-summary"},cat.steps.length,"단계 · ",Math.round(totSec/60),"분"),
+            React.createElement("span",{className:"cat-arrow"},"›")
+          ),
+          React.createElement("div",{className:"cat-body"},
+            isEC&&React.createElement("div",{className:"edit-form"},
+              React.createElement("input",{value:catEdit.name,onChange:e=>setCatEdit({...catEdit,name:e.target.value}),placeholder:"타이머 이름"}),
+              React.createElement("div",{className:"row"},
+                React.createElement("input",{value:catEdit.icon,onChange:e=>setCatEdit({...catEdit,icon:e.target.value}),placeholder:"아이콘",style:{width:70,flex:"none",textAlign:"center"}}),
+                React.createElement("button",{className:"btn btn-sm",style:{flex:1},onClick:()=>saveEditCat(cat.id)},"저장"),
+                React.createElement("button",{className:"btn btn-g btn-sm",onClick:()=>setEditingCat(null)},"취소")
+              )
+            ),
+            React.createElement("div",{className:"step-list"},cat.steps.length===0?React.createElement("div",{className:"empty",style:{padding:10}},"단계를 추가해보세요"):
+              cat.steps.map(s=>{
+                const color=s.color||SC[0];const isES=editingStep?.cid===cat.id&&editingStep?.sid===s.id;
+                return React.createElement("div",{className:"step-item",key:s.id},
+                  React.createElement("div",{className:"step-dot",style:{background:color}}),
+                  isES?React.createElement("div",{className:"step-edit-row"},
+                    React.createElement("input",{value:stepEdit.name,onChange:e=>setStepEdit({...stepEdit,name:e.target.value}),onKeyDown:e=>e.key==="Enter"&&saveEditStep(cat.id,s.id)}),
+                    React.createElement("input",{type:"number",value:stepEdit.min,onChange:e=>setStepEdit({...stepEdit,min:e.target.value}),style:{width:50},placeholder:"분"}),
+                    React.createElement("input",{type:"number",value:stepEdit.sec,onChange:e=>setStepEdit({...stepEdit,sec:e.target.value}),style:{width:50},placeholder:"초"}),
+                    React.createElement("button",{className:"btn btn-sm",onClick:()=>saveEditStep(cat.id,s.id)},"저장"),
+                    React.createElement("button",{className:"btn btn-g btn-sm",onClick:()=>setEditingStep(null)},"취소")
+                  ):React.createElement(React.Fragment,null,
+                    React.createElement("span",{className:"step-nm"},s.name),
+                    React.createElement("span",{className:"step-dur"},String(s.min).padStart(2,"0"),":",String(s.sec).padStart(2,"0")),
+                    React.createElement("button",{className:"btn-icon",onClick:()=>startEditStep(cat.id,s.id)},"✏️"),
+                    React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:()=>delStep(cat.id,s.id)},"×")
+                  )
+                );
+              })
+            ),
+            React.createElement("div",{className:"add-step"},
+              React.createElement("div",{className:"color-picker"},SC.map(c=>React.createElement("div",{key:c,className:`color-dot${newStepColor===c?" sel":""}`,style:{background:c},onClick:()=>setNewStepColor(c)}))),
+              React.createElement("input",{placeholder:"단계 이름",value:sf.name,onChange:e=>setSF(cat.id,{name:e.target.value})}),
+              React.createElement("input",{type:"number",min:0,max:99,placeholder:"분",className:"dur-inp",value:sf.min,onChange:e=>setSF(cat.id,{min:e.target.value})}),
+              React.createElement("input",{type:"number",min:0,max:59,placeholder:"초",className:"dur-inp",value:sf.sec,onChange:e=>setSF(cat.id,{sec:e.target.value})}),
+              React.createElement("button",{className:"btn btn-sm",onClick:()=>addStep(cat.id)},"+ 추가")
+            ),
+            React.createElement("div",{className:"row",style:{marginTop:10,gap:6}},
+              cat.steps.length>0&&React.createElement("button",{className:"btn btn-sm",style:{flex:1},onClick:()=>startRun(cat.id)},"▶ 실행하기"),
+              React.createElement("button",{className:"btn btn-g btn-sm",onClick:e=>{e.stopPropagation();startEditCat(cat);}},"✏️ 수정"),
+              React.createElement("button",{className:"btn btn-sm",style:{background:"#fce8ea",color:"var(--red)"},onClick:e=>{e.stopPropagation();delCat(cat.id);}},"🗑 삭제")
+            )
+          )
+        );
+      })),
+      React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"lbl"},React.createElement(Sparkles,{size:15,strokeWidth:2})," 새 타이머 만들기"),
+        React.createElement("input",{placeholder:"타이머 이름 (예: 독서, 운동, 영어공부...)",value:newCatName,onChange:e=>setNewCatName(e.target.value)}),
+        React.createElement("div",{className:"row",style:{marginTop:8}},
+          React.createElement("input",{placeholder:"아이콘",value:newCatIcon,onChange:e=>setNewCatIcon(e.target.value),style:{width:80,flex:"none",textAlign:"center"}}),
+          React.createElement("button",{className:"btn",style:{flex:1},onClick:addCat},"+ 만들기")
+        )
+      )
+    );
+  }
+
+  const PROJ_COLORS=["#8878cc","#b8d2ee","#b6dec6","#f5cfae","#f3b5be","#d4c2ee"];
+
+  function ProjectTab({projects,setProjects}){
+    const today=fmt(new Date());
+    const [projSeq,setProjSeq]=useLocalStorage("projSeq",1);
+    const [taskSeq,setTaskSeq]=useLocalStorage("ptaskSeq",1);
+    const [projMemos,setProjMemos]=useLocalStorage("projMemos",{});
+    const [openProjs,setOpenProjs]=useState(new Set());
+    const [taskForms,setTaskForms]=useState({});
+    const [showNewForm,setShowNewForm]=useState(false);
+    const [newProj,setNewProj]=useState({name:"",icon:"",date:"",desc:"",color:PROJ_COLORS[0],hasDate:false});
+    const [expandedTaskId,setExpandedTaskId]=useState(null);
+    function getDday(dateStr){if(!dateStr)return null;const target=new Date(dateStr+"T00:00:00");const now=new Date();now.setHours(0,0,0,0);return Math.ceil((target-now)/86400000);}
+    function addProject(){const name=newProj.name.trim();if(!name)return;const icon=newProj.icon.trim()||"📋";setProjects(prev=>[...prev,{id:projSeq,name,icon,targetDate:newProj.date,desc:newProj.desc.trim(),color:newProj.color,tasks:[],createdAt:today}]);setProjSeq(s=>s+1);setNewProj({name:"",icon:"",date:"",desc:"",color:PROJ_COLORS[0],hasDate:false});setShowNewForm(false);}
+    function delProject(id){setProjects(prev=>prev.filter(p=>p.id!==id));setOpenProjs(prev=>{const n=new Set(prev);n.delete(id);return n;});}
+    function toggleProj(id){setOpenProjs(prev=>{const n=new Set(prev);if(n.has(id))n.delete(id);else n.add(id);return n;});}
+    function getTF(pid){return taskForms[pid]||{text:"",startDate:"",endDate:""};}
+    function setTF(pid,patch){setTaskForms(prev=>({...prev,[pid]:{...getTF(pid),...patch}}));}
+    function addTask(pid){const f=getTF(pid);const text=f.text.trim();if(!text)return;setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:[...p.tasks,{id:taskSeq,text,startDate:f.startDate,endDate:f.endDate,done:false,memo:""}]}:p));setTaskSeq(s=>s+1);setTF(pid,{text:"",startDate:"",endDate:""});}
+    function togTask(pid,tid){setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:p.tasks.map(t=>t.id===tid?{...t,done:!t.done}:t)}:p));}
+    function delTask(pid,tid){setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:p.tasks.filter(t=>t.id!==tid)}:p));}
+    function updateTaskMemo(pid,tid,memo){setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:p.tasks.map(t=>t.id===tid?{...t,memo}:t)}:p));}
+    return React.createElement(React.Fragment,null,
+      projects.length===0&&!showNewForm&&React.createElement("div",{className:"proj-empty"},"📋 아직 프로젝트가 없어요",React.createElement("br"),React.createElement("span",{style:{fontSize:12}},"토익, 한국사, 시험공부 등 큰 목표를 관리해보세요")),
+      projects.map(proj=>{
+        const isOpen=openProjs.has(proj.id);const tot=proj.tasks.length;const dn=proj.tasks.filter(t=>t.done).length;
+        const pct=tot?Math.round(dn/tot*100):0;const dday=getDday(proj.targetDate);
+        const ddayColor=dday===null?proj.color:dday<0?"var(--red)":dday<=7?"#e07030":proj.color;const f=getTF(proj.id);
+        return React.createElement("div",{key:proj.id,className:"proj-card"+(isOpen?" open":""),style:{borderLeft:"4px solid "+proj.color,background:proj.color+"0D"}},
+          React.createElement("div",{className:"proj-head",onClick:()=>toggleProj(proj.id)},
+            React.createElement("div",{className:"proj-icon",style:{background:proj.color+"28"}},proj.icon),
+            React.createElement("div",{className:"proj-info"},
+              React.createElement("div",{className:"proj-name"},proj.name),
+              React.createElement("div",{className:"proj-meta"},tot?dn+"/"+tot+"개 완료 · "+pct+"%":"할 일을 추가해보세요",proj.targetDate?" · "+proj.targetDate:"")
+            ),
+            dday!==null&&React.createElement("div",{className:"proj-dday-box"},
+              React.createElement("div",{className:"proj-dday",style:{color:ddayColor}},dday===0?"D-DAY":dday>0?"D-"+dday:"D+"+Math.abs(dday)),
+              React.createElement("div",{className:"proj-dday-lbl"},dday===0?"오늘!":dday>0?"남음":"지남")
+            ),
+            React.createElement("span",{className:"proj-arrow"},"›")
+          ),
+          React.createElement("div",{className:"proj-body"},
+            tot>0&&React.createElement("div",{className:"proj-pbar-wrap"},
+              React.createElement("div",{className:"proj-prog-info"},React.createElement("span",null,dn+"/"+tot+"개 완료"),React.createElement("span",{style:{fontWeight:700,color:pct===100?"#6858aa":proj.color}},pct+"%")),
+              React.createElement("div",{className:"pbar"},React.createElement("div",{className:"pfill",style:{width:pct+"%",background:"linear-gradient(90deg,"+proj.color+","+proj.color+"99)"}}))
+            ),
+            proj.desc&&React.createElement("div",{className:"proj-desc"},proj.desc),
+            proj.tasks.length===0?React.createElement("div",{style:{fontSize:12,color:"var(--t3)",padding:"8px 0 4px",textAlign:"center"}},"할 일을 추가해보세요"):
+            proj.tasks.map(t=>{
+              const isOver=t.endDate&&t.endDate<today&&!t.done;
+              const dateLabel=t.startDate&&t.endDate?t.startDate.slice(5).replace("-","/")+
+" ~ "+t.endDate.slice(5).replace("-","/"):t.endDate?"~ "+t.endDate.slice(5).replace("-","/"):t.startDate?t.startDate.slice(5).replace("-","/")+
+" ~":(t.dueDate?"~ "+t.dueDate.slice(5).replace("-","/"):null);
+              const isExpanded=expandedTaskId===proj.id+"-"+t.id;
+              return React.createElement("div",{key:t.id},
+                React.createElement("div",{className:"ptask"+(t.done?" done":"")},
+                  React.createElement("div",{className:"chk"+(t.done?" on":""),style:{borderColor:t.done?proj.color:undefined,background:t.done?proj.color:undefined},onClick:()=>togTask(proj.id,t.id)},t.done?"✓":""),
+                  React.createElement("span",{className:"ptask-txt"},t.text),
+                  dateLabel&&React.createElement("span",{className:"ptask-due"+(isOver?" overdue":"")},isOver?"⚠️ ":"",dateLabel),
+                  React.createElement("button",{className:"ptask-memo-btn"+((t.memo||"").trim()?" has-memo":""),onClick:()=>setExpandedTaskId(isExpanded?null:proj.id+"-"+t.id),title:"메모"},"✍️"),
+                  React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:()=>delTask(proj.id,t.id)},"×")
+                ),
+                isExpanded&&React.createElement("div",{className:"ptask-memo-area"},
+                  React.createElement("textarea",{placeholder:"할 일 메모...",value:t.memo||"",rows:3,onChange:e=>updateTaskMemo(proj.id,t.id,e.target.value)})
+                )
+              );
+            }),
+            React.createElement("div",{className:"proj-add-task"},
+              React.createElement("input",{placeholder:"할 일 추가...",value:f.text,onChange:e=>setTF(proj.id,{text:e.target.value}),onKeyDown:e=>e.key==="Enter"&&addTask(proj.id),style:{background:"#fff"}}),
+              React.createElement("div",{style:{display:"flex",gap:4,alignItems:"center",flexWrap:"wrap"}},
+                React.createElement("span",{style:{fontSize:11,color:"var(--t3)",whiteSpace:"nowrap"}},"시작"),
+                React.createElement("input",{type:"date",value:f.startDate,onChange:e=>setTF(proj.id,{startDate:e.target.value}),className:"proj-date-inp",style:{background:"#fff"}}),
+                React.createElement("span",{style:{fontSize:11,color:"var(--t3)",whiteSpace:"nowrap"}},"~종료"),
+                React.createElement("input",{type:"date",value:f.endDate,onChange:e=>setTF(proj.id,{endDate:e.target.value}),className:"proj-date-inp",style:{background:"#fff"}})
+              ),
+              React.createElement("button",{className:"btn btn-sm",onClick:()=>addTask(proj.id)},"+ 추가")
+            ),
+            React.createElement("div",{className:"proj-memo-wrap"},
+              React.createElement("div",{className:"proj-memo-lbl"},"MEMO"),
+              React.createElement("textarea",{className:"proj-memo",placeholder:"프로젝트 메모...",value:projMemos[proj.id]||"",onChange:e=>setProjMemos(prev=>({...prev,[proj.id]:e.target.value}))})
+            ),
+            React.createElement("div",{style:{display:"flex",justifyContent:"flex-end",marginTop:12}},
+              React.createElement("button",{className:"btn btn-sm",style:{background:"#fce8ea",color:"var(--red)"},onClick:()=>delProject(proj.id)},"🗑 프로젝트 삭제")
+            )
+          )
+        );
+      }),
+      showNewForm
+        ?React.createElement("div",{className:"proj-new-card"},
+            React.createElement("div",{className:"lbl"},React.createElement(Sparkles,{size:15,strokeWidth:2})," 새 프로젝트"),
+            React.createElement("div",{className:"row",style:{marginBottom:8}},
+              React.createElement("input",{placeholder:"아이콘",value:newProj.icon,onChange:e=>setNewProj({...newProj,icon:e.target.value}),style:{width:70,flex:"none",textAlign:"center"}}),
+              React.createElement("input",{placeholder:"프로젝트 이름",value:newProj.name,onChange:e=>setNewProj({...newProj,name:e.target.value})})
+            ),
+            React.createElement("label",{style:{display:"flex",alignItems:"center",gap:7,fontSize:11,color:"var(--t2)",marginBottom:6,cursor:"pointer"}},
+              React.createElement("input",{type:"checkbox",checked:newProj.hasDate,onChange:e=>setNewProj({...newProj,hasDate:e.target.checked,date:""}),style:{width:14,height:14,accentColor:"var(--lav)"}}),
+              "목표 날짜 설정"
+            ),
+            newProj.hasDate&&React.createElement("input",{type:"date",value:newProj.date,onChange:e=>setNewProj({...newProj,date:e.target.value}),style:{marginBottom:8}}),
+            React.createElement("input",{placeholder:"메모 (예: 목표 점수 900점)",value:newProj.desc,onChange:e=>setNewProj({...newProj,desc:e.target.value}),style:{marginBottom:10}}),
+            React.createElement("div",{className:"proj-color-row"},
+              React.createElement("span",{style:{fontSize:11,color:"var(--t2)"}},"색상:"),
+              PROJ_COLORS.map(c=>React.createElement("div",{key:c,className:"proj-col-dot"+(newProj.color===c?" sel":""),style:{background:c},onClick:()=>setNewProj({...newProj,color:c})}))
+            ),
+            React.createElement("div",{className:"row"},
+              React.createElement("button",{className:"btn",style:{flex:1},onClick:addProject},"만들기"),
+              React.createElement("button",{className:"btn btn-g",onClick:()=>setShowNewForm(false)},"취소")
+            )
+          )
+        :React.createElement("button",{className:"btn",style:{width:"100%",marginTop:4},onClick:()=>setShowNewForm(true)},"+ 새 프로젝트 만들기")
+    );
+  }
+
+  function StatisticsTab({habits,habitLog,dailyProgress,today}){
+    const [projects]=useLocalStorage("projects",[]);
+    const [todos]=useLocalStorage("todos",[]);
+    const now=new Date();
+    const last30=[];for(let i=29;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);last30.push(fmt(d));}
+    const last7=last30.slice(-7);
+    const totalTodos=todos.length;const doneTodos=todos.filter(t=>t.done).length;const todoPct=totalTodos?Math.round(doneTodos/totalTodos*100):0;
+    const habitStats=habits.map(h=>{
+      const eligible=last30.filter(ds=>h.days.includes(new Date(ds+"T00:00:00").getDay()));
+      const done=eligible.filter(ds=>(habitLog[ds]||[]).includes(h.id)).length;
+      const pct=eligible.length?Math.round(done/eligible.length*100):0;
+      let streak=0;const d=new Date(now);
+      for(let i=0;i<365;i++){const ds=fmt(d);const dow=d.getDay();if(h.days.includes(dow)){if((habitLog[ds]||[]).includes(h.id))streak++;else if(ds!==today)break;}d.setDate(d.getDate()-1);}
+      return{...h,pct,streak,done,total:eligible.length};
+    }).sort((a,b)=>b.pct-a.pct);
+    const projStats=projects.map(p=>{const tot=p.tasks.length;const dn=p.tasks.filter(t=>t.done).length;return{...p,pct:tot?Math.round(dn/tot*100):0,done:dn,total:tot};});
+    const weekDays=last7.map(ds=>{const dp=dailyProgress[ds]||0;const dow=new Date(ds+"T00:00:00").getDay();const dayHabits=habits.filter(h=>h.days.includes(dow));const habitDone=dayHabits.filter(h=>(habitLog[ds]||[]).includes(h.id)).length;const habitPct=dayHabits.length?Math.round(habitDone/dayHabits.length*100):null;return{ds,dp,habitPct};});
+    const maxStreak=habitStats.length?Math.max(...habitStats.map(h=>h.streak)):0;
+    const avgHabit30=habitStats.length?Math.round(habitStats.reduce((s,h)=>s+h.pct,0)/habitStats.length):0;
+    const projDone=projStats.filter(p=>p.pct===100).length;
+    return React.createElement(React.Fragment,null,
+      React.createElement("div",{className:"big-numbers"},
+        React.createElement("div",{className:"big-num-box"},React.createElement("div",{className:"big-num-val"},todoPct+"%"),React.createElement("div",{className:"big-num-lbl"},"할 일\n완료율")),
+        React.createElement("div",{className:"big-num-box"},React.createElement("div",{className:"big-num-val"},avgHabit30+"%"),React.createElement("div",{className:"big-num-lbl"},"30일\n습관 달성")),
+        React.createElement("div",{className:"big-num-box"},React.createElement("div",{className:"big-num-val"},maxStreak),React.createElement("div",{className:"big-num-lbl"},"최장\n연속 일수"))
+      ),
+      React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"stat-section-title"},"이번 주 하루별 현황"),
+        React.createElement("div",{className:"week-heatmap"},
+          weekDays.map(({ds,dp,habitPct})=>{
+            const d=new Date(ds+"T00:00:00");const combined=habitPct!==null?Math.round((dp+habitPct)/2):dp;
+            const h=Math.max(4,Math.round(combined*0.6));const isToday=ds===today;
+            return React.createElement("div",{key:ds,className:"wh-day"},
+              React.createElement("div",{className:"wh-lbl",style:{color:isToday?"var(--lav)":"var(--t3)",fontWeight:isToday?700:400}},WD[d.getDay()]),
+              React.createElement("div",{className:"wh-bar-wrap"},React.createElement("div",{className:"wh-bar",style:{height:h+"px",background:combined===0?"var(--lav-pale)":`linear-gradient(to top, var(--lav), var(--lav-soft))`,opacity:combined===0?1:0.4+combined*0.006}})),
+              React.createElement("div",{className:"wh-pct"},combined?combined+"%":"-")
+            );
+          })
+        )
+      ),
+      habits.length>0&&React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"stat-section-title"},"습관 달성률 (최근 30일)"),
+        habitStats.map(h=>React.createElement("div",{key:h.id,className:"habit-stat-row"},
+          React.createElement("div",{className:"habit-stat-icon",style:{background:(h.color||"#d4c2ee")+"44"}},h.icon),
+          React.createElement("div",{className:"habit-stat-info"},
+            React.createElement("div",{className:"habit-stat-name"},h.name),
+            React.createElement("div",{className:"habit-stat-bar-wrap"},React.createElement("div",{className:"habit-stat-bar",style:{width:h.pct+"%",background:h.color||"var(--lav)"}}))
+          ),
+          React.createElement("div",{className:"habit-stat-pct",style:{color:h.color||"var(--lav)"}},h.pct+"%"),
+          React.createElement("div",{style:{fontSize:10,color:"var(--t3)",minWidth:30,textAlign:"right"}},"🔥"+h.streak)
+        ))
+      ),
+      projects.length>0&&React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"stat-section-title"},"프로젝트 현황"),
+        projStats.map(p=>React.createElement("div",{key:p.id,className:"proj-stat-row"},
+          React.createElement("div",{className:"proj-stat-color",style:{background:p.color}}),
+          React.createElement("div",{className:"proj-stat-info"},
+            React.createElement("div",{className:"proj-stat-name"},p.icon+" "+p.name),
+            React.createElement("div",{className:"proj-stat-sub"},p.total?p.done+"/"+p.total+"개 완료":"할 일 없음"),
+            p.total>0&&React.createElement("div",{className:"habit-stat-bar-wrap",style:{marginTop:5}},React.createElement("div",{className:"habit-stat-bar",style:{width:p.pct+"%",background:p.color}}))
+          ),
+          React.createElement("div",{className:"habit-stat-pct",style:{color:p.color}},p.pct+"%")
+        )),
+        React.createElement("div",{style:{textAlign:"center",marginTop:10,fontSize:12,color:"var(--t3)"}},projDone+"/"+projects.length+"개 프로젝트 완료")
+      ),
+      React.createElement("div",{className:"card"},
+        React.createElement("div",{className:"stat-section-title"},"할 일 요약"),
+        React.createElement("div",{className:"big-numbers",style:{marginBottom:0}},
+          React.createElement("div",{className:"big-num-box"},React.createElement("div",{className:"big-num-val"},totalTodos),React.createElement("div",{className:"big-num-lbl"},"전체")),
+          React.createElement("div",{className:"big-num-box"},React.createElement("div",{className:"big-num-val",style:{color:"var(--grn)"}},doneTodos),React.createElement("div",{className:"big-num-lbl"},"완료")),
+          React.createElement("div",{className:"big-num-box"},React.createElement("div",{className:"big-num-val",style:{color:"var(--red)"}},totalTodos-doneTodos),React.createElement("div",{className:"big-num-lbl"},"미완료"))
+        )
+      )
+    );
+  }
+
+  function AssistantApp(){
+    const [tab,setTab]=useState("planner");
+    const [sub,setSub]=useState("daily");
+    const [calView,setCalView]=useState("weekly");
+    const [dark,setDark]=useLocalStorage("darkMode",false);
+    const [tabKey,setTabKey]=useState(0);
+    const [subKey,setSubKey]=useState(0);
+    const [habits,setHabits]=useLocalStorage("habits",[]);
+    const [habitLog,setHabitLog]=useLocalStorage("habitLog",{});
+    const [dailyProgress,setDailyProgress]=useLocalStorage("dailyProgress",{});
+    const [projects,setProjects]=useLocalStorage("projects",[]);
+    // Firebase 로그인 상태
+    const [fbUser,setFbUser]=useState(()=>_auth.currentUser);
+    const today=fmt(new Date());
+    const now=new Date();
+    const dateLabel=`${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()} ${WD[now.getDay()]}`;
+    const shared=useSharedEvents();
+
+    // Firebase 로그인 상태 변화 감지
+    useEffect(()=>{
+      window.__forceAuthUpdate=(user)=>setFbUser(user);
+      return()=>{window.__forceAuthUpdate=null;};
+    },[]);
+
+    useEffect(()=>{if(dark)document.body.classList.add("dark");else document.body.classList.remove("dark");},[dark]);
+
+    const toggleHabitLog=useCallback((hid,ds)=>{setHabitLog(prev=>{const arr=prev[ds]?[...prev[ds]]:[];const i=arr.indexOf(hid);if(i>=0)arr.splice(i,1);else arr.push(hid);return{...prev,[ds]:arr};});},[setHabitLog]);
+
+    function switchTab(t){setTab(t);setTabKey(k=>k+1);}
+    function switchSub(s){setSub(s);setSubKey(k=>k+1);}
+
+    function exportData(){
+      const keys=["todos","tidSeq","habits","hbSeq","habitLog","dailyProgress","sharedEvs","evSeq","projects","projSeq","ptaskSeq","projMemos","monthGoals","timerCats","tcSeq","darkMode"];
+      const data={};keys.forEach(k=>{try{data[k]=JSON.parse(localStorage.getItem(k));}catch{}});
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`my-assistant-backup-${fmt(new Date())}.json`;a.click();
+    }
+    function importData(){
+      const input=document.createElement("input");input.type="file";input.accept=".json";
+      input.onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();
+        reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);Object.entries(data).forEach(([k,v])=>{if(v!==null)localStorage.setItem(k,JSON.stringify(v));});alert("백업 복원 완료! 페이지를 새로고침 합니다.");window.location.reload();}catch{alert("잘못된 파일입니다.");}};reader.readAsText(file);};input.click();
+    }
+
+    const CAL_VIEWS=[{key:"weekly",label:"WEEKLY"},{key:"monthly",label:"MONTHLY"},{key:"statistics",label:"STATISTICS"}];
+
+    return React.createElement("div",{className:"app"},
+      React.createElement("div",{className:"hdr"},
+        React.createElement("div",null,
+          React.createElement("span",{className:"hdr-t"},"MY ASSISTANT"),
+          React.createElement("span",{style:{display:"block",fontSize:11,color:"var(--t2)",marginTop:2}},dateLabel)
+        ),
+        React.createElement("div",{className:"hdr-right"},
+          // 구글 로그인/로그아웃 버튼
+          fbUser
+            ?React.createElement(React.Fragment,null,
+                React.createElement("button",{
+                  className:"icon-btn",
+                  style:{background:"var(--lav)",color:"#fff",fontSize:12,fontWeight:600},
+                  onClick:()=>syncPush(fbUser.uid),
+                  title:"클라우드에 저장"
+                },"☁️ 저장"),
+                React.createElement("button",{
+                  className:"login-badge",
+                  onClick:()=>{if(confirm(fbUser.displayName+"으로 로그인 중\n로그아웃 하시겠어요?"))googleLogout();},
+                  title:"클릭해서 로그아웃"
+                },
+                  fbUser.photoURL?React.createElement("img",{src:fbUser.photoURL,alt:""}):null,
+                  React.createElement("span",{className:"name"},fbUser.displayName?.split(" ")[0]||"로그인됨")
+                )
+              )
+            :React.createElement("button",{
+                className:"icon-btn",
+                style:{background:"var(--lav)",color:"#fff",fontSize:12,fontWeight:600},
+                onClick:googleLogin,
+                title:"구글 계정으로 로그인하면 기기 간 동기화됩니다"
+              },"🔑 로그인"),
+          React.createElement("button",{className:"icon-btn",onClick:exportData,title:"백업 내보내기"},"↓"),
+          React.createElement("button",{className:"icon-btn",onClick:importData,title:"백업 불러오기"},"↑"),
+          React.createElement("button",{className:"icon-btn",onClick:()=>setDark(d=>!d),title:"다크모드 토글"},dark?"☀️":"🌙")
+        )
+      ),
+      React.createElement("nav",{className:"tnav"},
+        React.createElement("button",{className:tab==="planner"?"active":"",onClick:()=>switchTab("planner")},"PLANNER"),
+        React.createElement("button",{className:tab==="timer"?"active":"",onClick:()=>switchTab("timer")},"TIMER")
+      ),
+      tab==="planner"&&React.createElement("div",{key:"pl"+tabKey,className:"page tab-anim"},
+        React.createElement("div",{className:"sub-tabs"},
+          React.createElement("button",{className:`sub-tab${sub==="daily"?" on":""}`,onClick:()=>switchSub("daily")},"DAILY"),
+          React.createElement("button",{className:`sub-tab${sub==="calendar"?" on":""}`,onClick:()=>switchSub("calendar")},"CALENDAR"),
+          React.createElement("button",{className:`sub-tab${sub==="project"?" on":""}`,onClick:()=>switchSub("project")},"PROJECT")
+        ),
+        React.createElement("div",{key:subKey,className:"tab-anim"},
+          sub==="daily"&&React.createElement(DailyTab,{habits,setHabits,habitLog,setHabitLog,setDailyProgress,today,projects,setProjects}),
+          sub==="project"&&React.createElement(ProjectTab,{projects,setProjects}),
+          sub==="calendar"&&React.createElement(React.Fragment,null,
+            React.createElement("div",{className:"cal-view-3"},
+              CAL_VIEWS.map(v=>React.createElement("button",{key:v.key,className:"cvs3-btn"+(calView===v.key?" on":""),onClick:()=>setCalView(v.key)},v.label))
+            ),
+            calView==="weekly"&&React.createElement(WeeklyTab,{habits,habitLog,toggleHabitLog,shared,today}),
+            calView==="monthly"&&React.createElement(MonthlyTab,{habits,habitLog,toggleHabitLog,shared,dailyProgress,today}),
+            calView==="statistics"&&React.createElement(StatisticsTab,{habits,habitLog,dailyProgress,today})
+          )
+        )
+      ),
+      tab==="timer"&&React.createElement("div",{key:"ti"+tabKey,className:"page tab-anim"},React.createElement(TimerPage))
+    );
+  }
+
+  const _rootEl=document.getElementById("root");
+  ReactDOM.createRoot(_rootEl).render(React.createElement(AssistantApp));
+})();
+  </script>
+</body>
+</html>
