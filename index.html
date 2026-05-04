@@ -120,8 +120,8 @@ body { background: var(--bg); color: var(--t1); font-family: 'Nunito', 'Segoe UI
 .pri-trigger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; background: var(--lav-pale); border: none; border-radius: 20px; cursor: pointer; font-size: 12px; color: var(--lav); font-weight: 500; font-family: inherit; transition: .15s; }
 .pri-trigger:hover, .pri-trigger.on { background: var(--lav); color: #fff; }
 .pri-trigger .caret { font-size: 9px; opacity: .8; }
-.pri-menu { position: absolute; top: calc(100% + 6px); left: 0; background: #fff; border-radius: 14px; padding: 8px; box-shadow: 0 8px 24px rgba(80,60,160,.16); display: flex; gap: 6px; z-index: 20; }
-.pri-menu .pri-opt { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: .15s; background: transparent; padding: 0; }
+.pri-menu { position: absolute; top: calc(100% + 6px); left: 0; background: #fff; border-radius: 14px; padding: 8px; box-shadow: 0 8px 24px rgba(80,60,160,.16); display: flex; flex-direction: column; gap: 4px; z-index: 20; min-width: 110px; }
+.pri-menu .pri-opt { width: 100%; height: 32px; border-radius: 10px; border: 2px solid transparent; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: .15s; background: transparent; padding: 0 8px; font-size: 12px; font-family: inherit; color: var(--t1); font-weight: 500; }
 .pri-menu .pri-opt:hover { background: var(--lav-xs); }
 .pri-menu .pri-opt.sel { border-color: var(--lav); }
 .ti { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--s2); border-radius: 14px; margin-bottom: 7px; border-left: 4px solid transparent; }
@@ -350,6 +350,41 @@ body { background: var(--bg); color: var(--t1); font-family: 'Nunito', 'Segoe UI
 .proj-memo { width: 100%; min-height: 80px; resize: vertical; background: var(--s2); border: 1.5px solid transparent; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-family: inherit; color: var(--t1); outline: none; transition: border-color .2s; line-height: 1.6; box-sizing: border-box; }
 .proj-memo:focus { border-color: var(--lav-soft); background: #fff; }
 .proj-empty { text-align: center; padding: 40px 20px; color: var(--t3); font-size: 13px; line-height: 2; }
+/* MEMO TAB */
+.memo-cat-card { background: var(--s1); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 12px; }
+.memo-cat-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; cursor: pointer; transition: .15s; }
+.memo-cat-head:hover { background: var(--lav-xs); }
+.memo-cat-icon { font-size: 22px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 14px; flex-shrink: 0; }
+.memo-cat-name { flex: 1; font-size: 15px; font-weight: 700; }
+.memo-cat-count { font-size: 11px; color: var(--t2); }
+.memo-cat-arrow { color: var(--t3); font-size: 16px; transition: .2s; flex-shrink: 0; }
+.memo-cat-card.open .memo-cat-arrow { transform: rotate(90deg); }
+.memo-cat-body { display: none; padding: 0 18px 16px; border-top: 1px solid var(--lav-xs); }
+.memo-cat-card.open .memo-cat-body { display: block; }
+.memo-card { background: var(--s2); border-radius: 14px; padding: 13px 15px; margin-bottom: 8px; cursor: pointer; transition: .15s; border-left: 4px solid transparent; }
+.memo-card:hover { background: var(--lav-xs); }
+.memo-card.starred { border-left-color: #f5c842; }
+.memo-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.memo-card-title { flex: 1; font-size: 14px; font-weight: 700; color: var(--t1); }
+.memo-star-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 2px 4px; transition: .15s; }
+.memo-card-preview { font-size: 12px; color: var(--t2); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 6px; white-space: pre-wrap; }
+.memo-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.memo-tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--lav-pale); color: var(--lav); font-weight: 600; }
+.memo-detail { background: var(--s1); border-radius: 16px; padding: 18px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.memo-detail-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.memo-detail-title { flex: 1; font-size: 16px; font-weight: 700; }
+.memo-detail-body { font-size: 13px; color: var(--t2); line-height: 1.8; white-space: pre-wrap; margin-bottom: 12px; min-height: 80px; }
+.memo-edit-form { background: var(--s2); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+.memo-edit-form input { margin-bottom: 8px; }
+.memo-edit-form textarea { width: 100%; background: var(--s1); border: 1.5px solid transparent; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-family: inherit; color: var(--t1); resize: vertical; outline: none; min-height: 100px; transition: .2s; line-height: 1.7; box-sizing: border-box; margin-bottom: 8px; }
+.memo-edit-form textarea:focus { border-color: var(--lav-soft); background: #fff; }
+.memo-tag-inp { font-size: 12px !important; }
+.memo-fav-section { background: var(--lav-xs); border-radius: 16px; padding: 14px; margin-bottom: 14px; }
+.memo-fav-lbl { font-size: 11px; font-weight: 700; color: var(--lav); letter-spacing: 1px; font-family: 'Space Mono', monospace; margin-bottom: 10px; }
+.memo-empty { text-align: center; padding: 28px 20px; color: var(--t3); font-size: 13px; line-height: 2; }
+.memo-new-cat-form { background: var(--s1); border-radius: 20px; padding: 18px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.memo-new-cat-form input { margin-bottom: 8px; }
+
 .ti-memo-btn { background: none; border: none; cursor: pointer; padding: 2px 5px; font-size: 11px; color: var(--t3); transition: .15s; border-radius: 6px; }
 .ti-memo-btn:hover { color: var(--lav); background: var(--lav-xs); }
 .ti-memo-btn.has-memo { color: var(--lav-soft); }
@@ -461,7 +496,7 @@ const _db = firebase.firestore();
 const SYNC_KEYS = [
   "todos","tidSeq","habits","hbSeq","habitLog","dailyProgress",
   "sharedEvs","evSeq","weekGoals","wgSeq","monthGoals","mgSeq",
-  "projects","projSeq","ptaskSeq","projMemos","timerCats","catSeq","stepSeq","darkMode"
+  "projects","projSeq","ptaskSeq","projMemos","timerCats","catSeq","stepSeq","darkMode","memoCategories","memoCatSeq","memos","memoSeq"
 ];
 
 function showToast(msg) {
@@ -599,6 +634,8 @@ _auth.onAuthStateChanged(user => {
     const [filterColorOpen,setFilterColorOpen]=useState(false);
     const [editingId,setEditingId]=useState(null);
     const [editValue,setEditValue]=useState("");
+    const [editPri,setEditPri]=useState("y");
+    const [editPriOpen,setEditPriOpen]=useState(false);
     const editRef=useRef(null);
     const [expandedTodoId,setExpandedTodoId]=useState(null);
     const [hbName,setHbName]=useState("");
@@ -632,8 +669,8 @@ _auth.onAuthStateChanged(user => {
     function addTodo(){const v=tIn.trim();if(!v)return;setTodos(prev=>[...prev,{id:tidSeq,text:v,pri:tPr,done:false}]);setTidSeq(s=>s+1);setTIn("");}
     function tog(id){setTodos(prev=>prev.map(t=>t.id===id?{...t,done:!t.done}:t));}
     function del(id){setTodos(prev=>prev.filter(t=>t.id!==id));setEditingId(null);}
-    function startEdit(t){setEditingId(t.id);setEditValue(t.text);}
-    function saveEdit(id){if(editValue.trim())setTodos(prev=>prev.map(t=>t.id===id?{...t,text:editValue.trim()}:t));setEditingId(null);}
+    function startEdit(t){setEditingId(t.id);setEditValue(t.text);setEditPri(migPri(t.pri));setEditPriOpen(false);}
+    function saveEdit(id){if(editValue.trim())setTodos(prev=>prev.map(t=>t.id===id?{...t,text:editValue.trim(),pri:editPri}:t));setEditingId(null);setEditPriOpen(false);}
 
     let cardBg="#ffffff",cardShadow="var(--shadow)";
     if(pct>=100){cardBg="linear-gradient(135deg,#cfc5f5,#b8b0e8)";cardShadow="0 8px 28px rgba(104,88,170,.28)";}
@@ -664,7 +701,8 @@ _auth.onAuthStateChanged(user => {
             ),
             priOpen&&React.createElement("div",{className:"pri-menu",onMouseLeave:()=>setPriOpen(false)},
               PRI_KEYS.map(k=>React.createElement("button",{key:k,type:"button",className:`pri-opt${tPr===k?" sel":""}`,title:PRI_LABEL[k],onClick:()=>{setTPr(k);setPriOpen(false);}},
-                React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[k]}})
+                React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[k]}}),
+                React.createElement("span",null,PRI_LABEL[k])
               ))
             )
           ),
@@ -683,7 +721,8 @@ _auth.onAuthStateChanged(user => {
             ),
             filterColorOpen&&React.createElement("div",{className:"pri-menu",onMouseLeave:()=>setFilterColorOpen(false)},
               PRI_KEYS.map(k=>React.createElement("button",{key:k,type:"button",className:`pri-opt${filter===k?" sel":""}`,title:PRI_LABEL[k],onClick:()=>{setFilter(k);setFilterColorOpen(false);}},
-                React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[k]}})
+                React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[k]}}),
+                React.createElement("span",null,PRI_LABEL[k])
               ))
             )
           )
@@ -696,6 +735,18 @@ _auth.onAuthStateChanged(user => {
               editingId===t.id
                 ?React.createElement("div",{className:"ti-edit"},
                     React.createElement("input",{ref:editRef,value:editValue,onChange:e=>setEditValue(e.target.value),onKeyDown:e=>{if(e.key==="Enter")saveEdit(t.id);if(e.key==="Escape")setEditingId(null);}}),
+                    React.createElement("div",{className:"pri-picker"},
+                      React.createElement("button",{type:"button",className:"pri-trigger",onClick:()=>setEditPriOpen(v=>!v)},
+                        React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[editPri]}}),
+                        React.createElement("span",{className:"caret"},"▼")
+                      ),
+                      editPriOpen&&React.createElement("div",{className:"pri-menu",onMouseLeave:()=>setEditPriOpen(false)},
+                        PRI_KEYS.map(k=>React.createElement("button",{key:k,type:"button",className:`pri-opt${editPri===k?" sel":""}`,onClick:()=>{setEditPri(k);setEditPriOpen(false);}},
+                          React.createElement("span",{className:"pri-dot",style:{background:PRI_COLOR[k]}}),
+                          React.createElement("span",null,PRI_LABEL[k])
+                        ))
+                      )
+                    ),
                     React.createElement("button",{className:"btn btn-sm",onClick:()=>saveEdit(t.id)},"저장")
                   )
                 :React.createElement(React.Fragment,null,
@@ -1427,6 +1478,258 @@ _auth.onAuthStateChanged(user => {
     );
   }
 
+
+  function MemoTab() {
+    const [memoCategories, setMemoCategories] = useLocalStorage("memoCategories", []);
+    const [memoCatSeq, setMemoCatSeq] = useLocalStorage("memoCatSeq", 1);
+    const [memos, setMemos] = useLocalStorage("memos", []);
+    const [memoSeq, setMemoSeq] = useLocalStorage("memoSeq", 1);
+    const [openCats, setOpenCats] = useState(new Set());
+    const [subTab, setSubTab] = useState("all");
+    const [showNewCatForm, setShowNewCatForm] = useState(false);
+    const [newCat, setNewCat] = useState({name:"", icon:"", color:"#8878cc"});
+    const [selectedMemoId, setSelectedMemoId] = useState(null);
+    const [editingMemoId, setEditingMemoId] = useState(null);
+    const [showAddMemoForCat, setShowAddMemoForCat] = useState(null);
+
+    // 폼 값을 ref로 관리 (스테일 클로저 방지)
+    const titleRef = useRef("");
+    const bodyRef = useRef("");
+    const tagsRef = useRef("");
+    const editTitleRef = useRef("");
+    const editBodyRef = useRef("");
+    const editTagsRef = useRef("");
+    const newCatNameRef = useRef("");
+    const newCatIconRef = useRef("");
+
+    const CAT_COLORS = ["#8878cc","#b8d2ee","#b6dec6","#f5cfae","#f3b5be","#d4c2ee"];
+
+    function toggleCat(id) {
+      setOpenCats(prev => { const n = new Set(prev); n.has(id)?n.delete(id):n.add(id); return n; });
+    }
+
+    function addCategory() {
+      const name = newCatNameRef.current.trim();
+      if (!name) return;
+      const icon = newCatIconRef.current.trim() || "📝";
+      setMemoCategories(prev => [...prev, {id:memoCatSeq, name, icon, color:newCat.color}]);
+      setMemoCatSeq(s => s+1);
+      newCatNameRef.current = "";
+      newCatIconRef.current = "";
+      document.querySelectorAll(".new-cat-name-inp").forEach(el => el.value = "");
+      document.querySelectorAll(".new-cat-icon-inp").forEach(el => el.value = "");
+      setShowNewCatForm(false);
+    }
+
+    function delCategory(id) {
+      if (!confirm("카테고리와 메모를 모두 삭제할까요?")) return;
+      setMemoCategories(prev => prev.filter(c => c.id !== id));
+      setMemos(prev => prev.filter(m => m.catId !== id));
+    }
+
+    function addMemo(catId) {
+      const title = titleRef.current.trim();
+      if (!title) { alert("제목을 입력해주세요!"); return; }
+      const body = bodyRef.current;
+      const rawTags = tagsRef.current;
+      const tags = rawTags.split(/\s+/).map(t=>t.trim()).filter(t=>t.startsWith("#")&&t.length>1);
+      const newMemo = {id:memoSeq, catId, title, body, tags, starred:false, createdAt:fmt(new Date())};
+      setMemos(prev => [...prev, newMemo]);
+      setMemoSeq(s => s+1);
+      titleRef.current = "";
+      bodyRef.current = "";
+      tagsRef.current = "";
+      document.querySelectorAll(".memo-title-inp").forEach(el => el.value = "");
+      document.querySelectorAll(".memo-body-inp").forEach(el => el.value = "");
+      document.querySelectorAll(".memo-tags-inp").forEach(el => el.value = "");
+      setShowAddMemoForCat(null);
+    }
+
+    function delMemo(id) {
+      if (!confirm("메모를 삭제할까요?")) return;
+      setMemos(prev => prev.filter(m => m.id !== id));
+      setSelectedMemoId(null);
+    }
+
+    function toggleStar(id) {
+      setMemos(prev => prev.map(m => m.id===id ? {...m, starred:!m.starred} : m));
+    }
+
+    function saveEditMemo(id) {
+      const title = editTitleRef.current.trim();
+      if (!title) return;
+      const body = editBodyRef.current;
+      const rawTags = editTagsRef.current;
+      const tags = rawTags.split(/\s+/).map(t=>t.trim()).filter(t=>t.startsWith("#")&&t.length>1);
+      setMemos(prev => prev.map(m => m.id===id ? {...m, title, body, tags} : m));
+      setEditingMemoId(null);
+    }
+
+    const selectedMemo = selectedMemoId ? memos.find(m => m.id===selectedMemoId) : null;
+    const starredMemos = memos.filter(m => m.starred);
+
+    // 상세보기
+    if (selectedMemo) {
+      const cat = memoCategories.find(c => c.id===selectedMemo.catId);
+      const isEditing = editingMemoId === selectedMemo.id;
+      return React.createElement("div", null,
+        React.createElement("button", {className:"back-btn", onClick:()=>{setSelectedMemoId(null);setEditingMemoId(null);}}, "← 메모 목록으로"),
+        React.createElement("div", {className:"memo-detail"},
+          isEditing
+            ? React.createElement(React.Fragment, null,
+                React.createElement("input", {
+                  className:"memo-title-inp",
+                  placeholder:"제목",
+                  defaultValue:selectedMemo.title,
+                  onChange:e=>{editTitleRef.current=e.target.value;},
+                  style:{width:"100%",marginBottom:8,background:"var(--s2)",border:"none",borderRadius:12,padding:"10px 14px",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--t1)"}
+                }),
+                React.createElement("textarea", {
+                  className:"memo-body-inp",
+                  placeholder:"본문 내용...",
+                  defaultValue:selectedMemo.body,
+                  onChange:e=>{editBodyRef.current=e.target.value;},
+                  rows:8,
+                  style:{width:"100%",marginBottom:8,background:"var(--s2)",border:"1.5px solid transparent",borderRadius:12,padding:"10px 12px",fontSize:13,fontFamily:"inherit",color:"var(--t1)",resize:"vertical",outline:"none",lineHeight:1.7,boxSizing:"border-box"}
+                }),
+                React.createElement("input", {
+                  className:"memo-tags-inp",
+                  placeholder:"태그 (예: #중요 #나중에)",
+                  defaultValue:selectedMemo.tags.join(" "),
+                  onChange:e=>{editTagsRef.current=e.target.value;},
+                  style:{width:"100%",marginBottom:8,background:"var(--s2)",border:"none",borderRadius:12,padding:"10px 14px",fontSize:13,outline:"none",fontFamily:"inherit",color:"var(--t1)"}
+                }),
+                React.createElement("div", {className:"row"},
+                  React.createElement("button", {className:"btn", style:{flex:1}, onClick:()=>saveEditMemo(selectedMemo.id)}, "저장"),
+                  React.createElement("button", {className:"btn btn-g", onClick:()=>setEditingMemoId(null)}, "취소")
+                )
+              )
+            : React.createElement(React.Fragment, null,
+                React.createElement("div", {className:"memo-detail-head"},
+                  cat&&React.createElement("span",{style:{fontSize:18}},cat.icon),
+                  React.createElement("span", {className:"memo-detail-title"}, selectedMemo.title),
+                  React.createElement("button", {className:"memo-star-btn", onClick:()=>toggleStar(selectedMemo.id)}, selectedMemo.starred?"⭐":"☆"),
+                  React.createElement("button", {className:"btn-icon", onClick:()=>{editTitleRef.current=selectedMemo.title;editBodyRef.current=selectedMemo.body;editTagsRef.current=selectedMemo.tags.join(" ");setEditingMemoId(selectedMemo.id);}}, "✏️"),
+                  React.createElement("button", {className:"btn-icon", style:{color:"var(--red)"}, onClick:()=>delMemo(selectedMemo.id)}, "×")
+                ),
+                React.createElement("div", {className:"memo-detail-body"}, selectedMemo.body||React.createElement("span",{style:{color:"var(--t3)"}},"본문 없음")),
+                selectedMemo.tags.length>0&&React.createElement("div",{className:"memo-tags"},selectedMemo.tags.map((t,i)=>React.createElement("span",{key:i,className:"memo-tag"},t))),
+                React.createElement("div",{style:{fontSize:10,color:"var(--t3)",marginTop:10}},selectedMemo.createdAt)
+              )
+        )
+      );
+    }
+
+    return React.createElement(React.Fragment, null,
+      React.createElement("div", {className:"sub-tabs"},
+        React.createElement("button", {className:"sub-tab"+(subTab==="all"?" on":""), onClick:()=>setSubTab("all")}, "전체"),
+        React.createElement("button", {className:"sub-tab"+(subTab==="starred"?" on":""), onClick:()=>setSubTab("starred")}, "⭐ 즐겨찾기")
+      ),
+
+      subTab==="starred"&&React.createElement("div", null,
+        starredMemos.length===0
+          ? React.createElement("div",{className:"memo-empty"},"⭐ 즐겨찾기한 메모가 없어요",React.createElement("br"),React.createElement("span",{style:{fontSize:12}},"메모의 ☆ 버튼을 눌러 추가하세요"))
+          : starredMemos.map(m=>{
+              const cat=memoCategories.find(c=>c.id===m.catId);
+              return React.createElement("div",{key:m.id,className:"memo-card starred",onClick:()=>setSelectedMemoId(m.id)},
+                React.createElement("div",{className:"memo-card-head"},
+                  cat&&React.createElement("span",{style:{fontSize:14}},cat.icon),
+                  React.createElement("span",{className:"memo-card-title"},m.title),
+                  React.createElement("button",{className:"memo-star-btn",onClick:e=>{e.stopPropagation();toggleStar(m.id);}},m.starred?"⭐":"☆")
+                ),
+                m.body&&React.createElement("div",{className:"memo-card-preview"},m.body),
+                m.tags.length>0&&React.createElement("div",{className:"memo-tags"},m.tags.map((t,i)=>React.createElement("span",{key:i,className:"memo-tag"},t)))
+              );
+            })
+      ),
+
+      subTab==="all"&&React.createElement(React.Fragment, null,
+        memoCategories.length===0&&!showNewCatForm&&React.createElement("div",{className:"memo-empty"},
+          "📝 아직 카테고리가 없어요",React.createElement("br"),
+          React.createElement("span",{style:{fontSize:12}},"카테고리를 먼저 만들어보세요")
+        ),
+
+        memoCategories.map(cat=>{
+          const catMemos=memos.filter(m=>m.catId===cat.id);
+          const sorted=[...catMemos.filter(m=>m.starred),...catMemos.filter(m=>!m.starred)];
+          const isOpen=openCats.has(cat.id);
+          return React.createElement("div",{key:cat.id,className:"memo-cat-card"+(isOpen?" open":"")},
+            React.createElement("div",{className:"memo-cat-head",onClick:()=>toggleCat(cat.id)},
+              React.createElement("div",{className:"memo-cat-icon",style:{background:cat.color+"28"}},cat.icon),
+              React.createElement("span",{className:"memo-cat-name"},cat.name),
+              React.createElement("span",{className:"memo-cat-count"},catMemos.length+"개"),
+              React.createElement("button",{className:"btn-icon",style:{color:"var(--red)"},onClick:e=>{e.stopPropagation();delCategory(cat.id);}}, "×"),
+              React.createElement("span",{className:"memo-cat-arrow"},"›")
+            ),
+            React.createElement("div",{className:"memo-cat-body"},
+              sorted.length===0
+                ? React.createElement("div",{style:{fontSize:12,color:"var(--t3)",padding:"8px 0",textAlign:"center"}},"메모가 없어요")
+                : sorted.map(m=>
+                    React.createElement("div",{key:m.id,className:"memo-card"+(m.starred?" starred":""),onClick:()=>setSelectedMemoId(m.id)},
+                      React.createElement("div",{className:"memo-card-head"},
+                        React.createElement("span",{className:"memo-card-title"},m.title),
+                        React.createElement("button",{className:"memo-star-btn",onClick:e=>{e.stopPropagation();toggleStar(m.id);}},m.starred?"⭐":"☆")
+                      ),
+                      m.body&&React.createElement("div",{className:"memo-card-preview"},m.body),
+                      m.tags.length>0&&React.createElement("div",{className:"memo-tags"},m.tags.map((t,i)=>React.createElement("span",{key:i,className:"memo-tag"},t)))
+                    )
+                  ),
+              showAddMemoForCat===cat.id
+                ? React.createElement("div",{style:{marginTop:10}},
+                    React.createElement("input",{
+                      className:"memo-title-inp",
+                      placeholder:"제목 *",
+                      onChange:e=>{titleRef.current=e.target.value;},
+                      style:{width:"100%",marginBottom:8,background:"var(--s1)",border:"1.5px solid var(--lav-soft)",borderRadius:12,padding:"10px 14px",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--t1)"}
+                    }),
+                    React.createElement("textarea",{
+                      className:"memo-body-inp",
+                      placeholder:"본문 내용...",
+                      onChange:e=>{bodyRef.current=e.target.value;},
+                      rows:5,
+                      style:{width:"100%",marginBottom:8,background:"var(--s1)",border:"1.5px solid transparent",borderRadius:12,padding:"10px 12px",fontSize:13,fontFamily:"inherit",color:"var(--t1)",resize:"vertical",outline:"none",lineHeight:1.7,boxSizing:"border-box"}
+                    }),
+                    React.createElement("input",{
+                      className:"memo-tags-inp",
+                      placeholder:"태그 (예: #중요 #나중에)",
+                      onChange:e=>{tagsRef.current=e.target.value;},
+                      style:{width:"100%",marginBottom:10,background:"var(--s1)",border:"1.5px solid transparent",borderRadius:12,padding:"10px 14px",fontSize:13,outline:"none",fontFamily:"inherit",color:"var(--t1)"}
+                    }),
+                    React.createElement("div",{className:"row"},
+                      React.createElement("button",{className:"btn",style:{flex:1},onClick:()=>addMemo(cat.id)},"💾 저장"),
+                      React.createElement("button",{className:"btn btn-g",onClick:()=>{setShowAddMemoForCat(null);titleRef.current="";bodyRef.current="";tagsRef.current="";}}, "취소")
+                    )
+                  )
+                : React.createElement("button",{
+                    className:"btn btn-g btn-sm",
+                    style:{width:"100%",marginTop:8},
+                    onClick:e=>{e.stopPropagation();titleRef.current="";bodyRef.current="";tagsRef.current="";setShowAddMemoForCat(cat.id);}
+                  },"+ 메모 추가")
+            )
+          );
+        }),
+
+        showNewCatForm
+          ? React.createElement("div",{className:"memo-new-cat-form"},
+              React.createElement("div",{className:"lbl"},React.createElement(Sparkles,{size:15,strokeWidth:2})," 새 카테고리"),
+              React.createElement("div",{className:"row",style:{marginBottom:8}},
+                React.createElement("input",{className:"new-cat-icon-inp",placeholder:"아이콘",onChange:e=>{newCatIconRef.current=e.target.value;},style:{width:70,flex:"none",textAlign:"center",background:"var(--s2)",border:"none",borderRadius:12,padding:"10px 14px",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--t1)"}}),
+                React.createElement("input",{className:"new-cat-name-inp",placeholder:"카테고리 이름",onChange:e=>{newCatNameRef.current=e.target.value;},style:{flex:1,background:"var(--s2)",border:"none",borderRadius:12,padding:"10px 14px",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--t1)"}})
+              ),
+              React.createElement("div",{className:"proj-color-row"},
+                React.createElement("span",{style:{fontSize:11,color:"var(--t2)"}},"색상:"),
+                CAT_COLORS.map(c=>React.createElement("div",{key:c,className:"proj-col-dot"+(newCat.color===c?" sel":""),style:{background:c},onClick:()=>setNewCat(prev=>({...prev,color:c}))}))
+              ),
+              React.createElement("div",{className:"row"},
+                React.createElement("button",{className:"btn",style:{flex:1},onClick:addCategory},"만들기"),
+                React.createElement("button",{className:"btn btn-g",onClick:()=>setShowNewCatForm(false)},"취소")
+              )
+            )
+          : React.createElement("button",{className:"btn",style:{width:"100%",marginTop:4},onClick:()=>setShowNewCatForm(true)},"+ 새 카테고리 만들기")
+      )
+    );
+  }
+
   function AssistantApp(){
     const [tab,setTab]=useState("planner");
     const [sub,setSub]=useState("daily");
@@ -1510,7 +1813,8 @@ _auth.onAuthStateChanged(user => {
       ),
       React.createElement("nav",{className:"tnav"},
         React.createElement("button",{className:tab==="planner"?"active":"",onClick:()=>switchTab("planner")},"PLANNER"),
-        React.createElement("button",{className:tab==="timer"?"active":"",onClick:()=>switchTab("timer")},"TIMER")
+        React.createElement("button",{className:tab==="timer"?"active":"",onClick:()=>switchTab("timer")},"TIMER"),
+        React.createElement("button",{className:tab==="memo"?"active":"",onClick:()=>switchTab("memo")},"MEMO")
       ),
       tab==="planner"&&React.createElement("div",{key:"pl"+tabKey,className:"page tab-anim"},
         React.createElement("div",{className:"sub-tabs"},
@@ -1531,7 +1835,8 @@ _auth.onAuthStateChanged(user => {
           )
         )
       ),
-      tab==="timer"&&React.createElement("div",{key:"ti"+tabKey,className:"page tab-anim"},React.createElement(TimerPage))
+      tab==="timer"&&React.createElement("div",{key:"ti"+tabKey,className:"page tab-anim"},React.createElement(TimerPage)),
+      tab==="memo"&&React.createElement("div",{key:"me"+tabKey,className:"page tab-anim"},React.createElement(MemoTab))
     );
   }
 
