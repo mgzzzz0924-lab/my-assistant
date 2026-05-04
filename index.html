@@ -1305,9 +1305,9 @@ _auth.onAuthStateChanged(user => {
     function addProject(){const name=newProj.name.trim();if(!name)return;const icon=newProj.icon.trim()||"📋";setProjects(prev=>[...prev,{id:projSeq,name,icon,targetDate:newProj.date,desc:newProj.desc.trim(),color:newProj.color,tasks:[],createdAt:today}]);setProjSeq(s=>s+1);setNewProj({name:"",icon:"",date:"",desc:"",color:PROJ_COLORS[0],hasDate:false});setShowNewForm(false);}
     function delProject(id){setProjects(prev=>prev.filter(p=>p.id!==id));setOpenProjs(prev=>{const n=new Set(prev);n.delete(id);return n;});}
     function toggleProj(id){setOpenProjs(prev=>{const n=new Set(prev);if(n.has(id))n.delete(id);else n.add(id);return n;});}
-    function getTF(pid){return taskForms[pid]||{text:"",startDate:"",endDate:""};}
+    function getTF(pid){return taskForms[pid]||{text:"",startDate:"",endDate:"",hasDate:false};}
     function setTF(pid,patch){setTaskForms(prev=>({...prev,[pid]:{...getTF(pid),...patch}}));}
-    function addTask(pid){const f=getTF(pid);const text=f.text.trim();if(!text)return;setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:[...p.tasks,{id:taskSeq,text,startDate:f.startDate,endDate:f.endDate,done:false,memo:""}]}:p));setTaskSeq(s=>s+1);setTF(pid,{text:"",startDate:"",endDate:""});}
+    function addTask(pid){const f=getTF(pid);const text=f.text.trim();if(!text)return;setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:[...p.tasks,{id:taskSeq,text,startDate:f.startDate,endDate:f.endDate,done:false,memo:""}]}:p));setTaskSeq(s=>s+1);setTF(pid,{text:"",startDate:"",endDate:"",hasDate:false});}
     function togTask(pid,tid){setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:p.tasks.map(t=>t.id===tid?{...t,done:!t.done}:t)}:p));}
     function delTask(pid,tid){setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:p.tasks.filter(t=>t.id!==tid)}:p));}
     function updateTaskMemo(pid,tid,memo){setProjects(prev=>prev.map(p=>p.id===pid?{...p,tasks:p.tasks.map(t=>t.id===tid?{...t,memo}:t)}:p));}
@@ -1358,7 +1358,11 @@ _auth.onAuthStateChanged(user => {
             }),
             React.createElement("div",{className:"proj-add-task"},
               React.createElement("input",{placeholder:"할 일 추가...",value:f.text,onChange:e=>setTF(proj.id,{text:e.target.value}),onKeyDown:e=>e.key==="Enter"&&addTask(proj.id),style:{background:"#fff"}}),
-              React.createElement("div",{style:{display:"flex",gap:4,alignItems:"center",flexWrap:"wrap"}},
+              React.createElement("label",{style:{display:"flex",alignItems:"center",gap:6,fontSize:11,color:"var(--t2)",cursor:"pointer",margin:"4px 0"}},
+                React.createElement("input",{type:"checkbox",checked:!!f.hasDate,onChange:e=>setTF(proj.id,{hasDate:e.target.checked,startDate:"",endDate:""}),style:{width:13,height:13,accentColor:"var(--lav)"}}),
+                "날짜 설정"
+              ),
+              f.hasDate&&React.createElement("div",{style:{display:"flex",gap:4,alignItems:"center",flexWrap:"wrap",marginBottom:4}},
                 React.createElement("span",{style:{fontSize:11,color:"var(--t3)",whiteSpace:"nowrap"}},"시작"),
                 React.createElement("input",{type:"date",value:f.startDate,onChange:e=>setTF(proj.id,{startDate:e.target.value}),className:"proj-date-inp",style:{background:"#fff"}}),
                 React.createElement("span",{style:{fontSize:11,color:"var(--t3)",whiteSpace:"nowrap"}},"~종료"),
