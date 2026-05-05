@@ -548,20 +548,7 @@ _auth.onAuthStateChanged(user => {
 });
 // ===== FIREBASE 초기화 끝 =====
 
-// ===== 날짜 리셋 (자정 이후 완료된 할일 초기화) =====
-(function() {
-  const d = new Date();
-  const todayStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  const lastDate = localStorage.getItem('_lastActiveDate');
-  if (lastDate && lastDate !== todayStr) {
-    try {
-      const todos = JSON.parse(localStorage.getItem('todos') || '[]');
-      localStorage.setItem('todos', JSON.stringify(todos.filter(t => !t.done)));
-    } catch(e) {}
-  }
-  localStorage.setItem('_lastActiveDate', todayStr);
-})();
-// ===== 날짜 리셋 끝 =====
+// 날짜 리셋은 앱 내부 useEffect에서 처리
   </script>
   <script>
 (() => {
@@ -624,9 +611,7 @@ _auth.onAuthStateChanged(user => {
     if(["r","o","y","g","b","p"].includes(p))return p; return"y";
   }
 
-  function DailyTab({habits,setHabits,habitLog,setHabitLog,setDailyProgress,today,projects,setProjects}) {
-    const [todos,setTodos]=useLocalStorage("todos",[]);
-    const [tidSeq,setTidSeq]=useLocalStorage("tidSeq",1);
+  function DailyTab({todos,setTodos,tidSeq,setTidSeq,habits,setHabits,habitLog,setHabitLog,setDailyProgress,today,projects,setProjects}) {
     const [tIn,setTIn]=useState("");
     const [tPr,setTPr]=useState("y");
     const [filter,setFilter]=useState("all");
@@ -1741,6 +1726,8 @@ _auth.onAuthStateChanged(user => {
     const [dark,setDark]=useLocalStorage("darkMode",false);
     const [tabKey,setTabKey]=useState(0);
     const [subKey,setSubKey]=useState(0);
+    const [todos,setTodos]=useLocalStorage("todos",[]);
+    const [tidSeq,setTidSeq]=useLocalStorage("tidSeq",1);
     const [habits,setHabits]=useLocalStorage("habits",[]);
     const [habitLog,setHabitLog]=useLocalStorage("habitLog",{});
     const [dailyProgress,setDailyProgress]=useLocalStorage("dailyProgress",{});
@@ -1759,6 +1746,15 @@ _auth.onAuthStateChanged(user => {
     },[]);
 
     useEffect(()=>{if(dark)document.body.classList.add("dark");else document.body.classList.remove("dark");},[dark]);
+
+    // 날짜 바뀌면 완료된 할 일만 삭제 (Firebase sync 이후 실행되므로 안전)
+    useEffect(()=>{
+      const lastDate = localStorage.getItem('_lastActiveDate');
+      if (lastDate && lastDate !== today) {
+        setTodos(prev => prev.filter(t => !t.done));
+      }
+      localStorage.setItem('_lastActiveDate', today);
+    },[today]);
 
     const toggleHabitLog=useCallback((hid,ds)=>{setHabitLog(prev=>{const arr=prev[ds]?[...prev[ds]]:[];const i=arr.indexOf(hid);if(i>=0)arr.splice(i,1);else arr.push(hid);return{...prev,[ds]:arr};});},[setHabitLog]);
 
@@ -1827,7 +1823,7 @@ _auth.onAuthStateChanged(user => {
           React.createElement("button",{className:`sub-tab${sub==="project"?" on":""}`,onClick:()=>switchSub("project")},"PROJECT")
         ),
         React.createElement("div",{key:subKey,className:"tab-anim"},
-          sub==="daily"&&React.createElement(DailyTab,{habits,setHabits,habitLog,setHabitLog,setDailyProgress,today,projects,setProjects}),
+          sub==="daily"&&React.createElement(DailyTab,{todos,setTodos,tidSeq,setTidSeq,habits,setHabits,habitLog,setHabitLog,setDailyProgress,today,projects,setProjects}),
           sub==="project"&&React.createElement(ProjectTab,{projects,setProjects}),
           sub==="calendar"&&React.createElement(React.Fragment,null,
             React.createElement("div",{className:"cal-view-3"},
