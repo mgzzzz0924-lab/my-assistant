@@ -1,0 +1,17 @@
+{
+  "name": "MY ASSISTANT",
+  "short_name": "MY ASSISTANT",
+  "description": "개인 플래너 & 타이머",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0eef8",
+  "theme_color": "#8878cc",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
