@@ -3,10 +3,11 @@ const CACHE_NAME = 'my-assistant-v1';
 let _scheduled = null;
 
 function _showNotif(title, body) {
+  const scope = self.registration.scope;
   return self.registration.showNotification(title || '⏱ 타이머 완료!', {
     body: body || '단계가 끝났어요!',
-    icon: './icon.svg',
-    badge: './icon.svg',
+    icon: scope + 'icon.svg',
+    badge: scope + 'badge.svg',
     vibrate: [200, 100, 200, 100, 400],
     tag: 'timer-notification',
     requireInteraction: false,
