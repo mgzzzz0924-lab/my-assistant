@@ -593,7 +593,7 @@ function TimerPage(){
   const[cats,setCats]=useLocalStorage("timerCats",DEFAULT_CATS);const[catSeq,setCatSeq]=useLocalStorage("catSeq",2);const[stepSeq,setStepSeq]=useLocalStorage("stepSeq",10);const[openCats,setOpenCats]=useState(new Set([1]));const[editingCat,setEditingCat]=useState(null);const[editingStep,setEditingStep]=useState(null);const[newStepColor,setNewStepColor]=useState(SC[0]);const[newCatName,setNewCatName]=useState("");const[newCatIcon,setNewCatIcon]=useState("");const[stepForms,setStepForms]=useState({});
   function getSF(cid){return stepForms[cid]||{name:"",min:"",sec:""};}
   function setSF(cid,p){setStepForms(prev=>({...prev,[cid]:{...getSF(cid),...p}}));}
-  const[catEdit,setCatEdit]=useState({name:"",icon:""});const[stepEdit,setStepEdit]=useState({name:"",min:"",sec:""});const[runCat,setRunCat]=useState(null);const[runIdx,setRunIdx]=useState(0);const[runSec,setRunSec]=useState(0);const[runTotal,setRunTotal]=useState(0);const[runOn,setRunOn]=useState(false);const[runCnt,setRunCnt]=useState(0);const[runFocSec,setRunFocSec]=useState(0);const runEndAtRef=useRef(null);const runIvRef=useRef(null);const[vib,setVib]=useState(true);
+  const[catEdit,setCatEdit]=useState({name:"",icon:""});const[stepEdit,setStepEdit]=useState({name:"",min:"",sec:""});const[runCat,setRunCat]=useState(null);const[runIdx,setRunIdx]=useState(0);const[runSec,setRunSec]=useState(0);const[runTotal,setRunTotal]=useState(0);const[runOn,setRunOn]=useState(false);const[runCnt,setRunCnt]=useState(0);const[runFocSec,setRunFocSec]=useState(0);const runEndAtRef=useRef(null);const runIvRef=useRef(null);const[vib,setVib]=useState(true);const[autoNext,setAutoNext]=useLocalStorage("timerAutoNext",true);const autoNextRef=useRef(autoNext);
   // ===== 알림 관련 =====
   const[notifPerm,setNotifPerm]=useState(()=>typeof Notification!=='undefined'?Notification.permission:'unsupported');
   function reqNotif(){if(!('Notification' in window))return;Notification.requestPermission().then(p=>setNotifPerm(p));}
@@ -649,13 +649,13 @@ function TimerPage(){
         cancelTimerNotif();
         if(navigator.vibrate)navigator.vibrate([200,100,200,100,400]);
         sendNotif(_notifTitle,_notifBody);
-        if(runIdx<runCat.steps.length-1){const nextIdx=runIdx+1;setRunIdx(nextIdx);const ns=runCat.steps[nextIdx];const total=ns.min*60+ns.sec;setRunSec(total);setRunTotal(total);runEndAtRef.current=Date.now()+total*1000;setRunOn(true);}
+        if(runIdx<runCat.steps.length-1){const nextIdx=runIdx+1;setRunIdx(nextIdx);const ns=runCat.steps[nextIdx];const total=ns.min*60+ns.sec;setRunSec(total);setRunTotal(total);if(autoNextRef.current){runEndAtRef.current=Date.now()+total*1000;setRunOn(true);}else{setRunOn(false);runEndAtRef.current=null;document.title="MY ASSISTANT";}}
         else{setRunCnt(c=>c+1);setRunIdx(0);const fs=runCat.steps[0];setRunSec(fs.min*60+fs.sec);setRunTotal(fs.min*60+fs.sec);setRunOn(false);runEndAtRef.current=null;document.title="MY ASSISTANT";}
       }
     },250);
     runIvRef.current=iv;
     return()=>clearInterval(iv);
-  },[runOn,runIdx,runCat?.id]);
+  },[runOn,runIdx,runCat?.id]);useEffect(()=>{autoNextRef.current=autoNext;},[autoNext]);
   const circ=603;const filled=runTotal>0?circ*(runSec/runTotal):0;const ringColor=runCat?.steps[runIdx]?.color||SC[runIdx%SC.length];
   if(runCat){
     const m=String(Math.floor(runSec/60)).padStart(2,"0");const sStr=String(runSec%60).padStart(2,"0");
@@ -667,6 +667,7 @@ function TimerPage(){
         React.createElement("div",{className:"sp-progress"},runCat.steps.map((s,i)=>{let cls="sp-dot";if(i<runIdx)cls+=" d";else if(i===runIdx)cls+=" c";return React.createElement("div",{key:s.id,className:cls,title:s.name,onClick:()=>goToStep(i)});})),
         React.createElement("div",{className:"ring-outer"},React.createElement("svg",{width:"220",height:"220",viewBox:"0 0 220 220"},React.createElement("circle",{fill:"none",stroke:"#ede9fc",strokeWidth:"10",cx:"110",cy:"110",r:"96"}),React.createElement("circle",{fill:"none",stroke:ringColor,strokeWidth:"10",strokeLinecap:"round",cx:"110",cy:"110",r:"96",strokeDasharray:circ,strokeDashoffset:circ-filled})),React.createElement("div",{className:"ring-center"},React.createElement("div",{className:"ring-time"},m,":",sStr),React.createElement("div",{className:"ring-lbl"},runIdx+1," / ",runCat.steps.length," 단계"))),
         React.createElement("div",{className:"pomo-btns"},React.createElement("button",{className:"btn rst-btn btn-sm",onClick:resetStep},"↺ 리셋"),React.createElement("button",{className:"btn",onClick:toggleRun,style:{minWidth:130}},runOn?"⏸ 일시정지":"▶ 시작")),
+        React.createElement("label",{style:{display:"flex",alignItems:"center",gap:7,fontSize:12,color:"var(--t2)",justifyContent:"center",marginBottom:10,cursor:"pointer"}},React.createElement("input",{type:"checkbox",checked:autoNext,onChange:e=>setAutoNext(e.target.checked),style:{accentColor:"var(--lav)",width:14,height:14}}),"단계 자동 전환"),
         notifPerm==='granted'
           ?React.createElement("div",{style:{display:"flex",alignItems:"center",justifyContent:"center",gap:5,fontSize:11,color:"var(--lav)",marginBottom:12,background:"var(--lav-xs)",borderRadius:10,padding:"6px 12px"}},React.createElement(Bell,{size:12,strokeWidth:2.5}),React.createElement("span",null,"타이머 완료 시 알림 전송됩니다"))
           :React.createElement("div",{style:{textAlign:"center",marginBottom:12}},React.createElement("button",{className:"btn btn-g btn-sm",onClick:reqNotif,style:{display:"inline-flex",alignItems:"center",gap:5}},React.createElement(Bell,{size:13,strokeWidth:2}),React.createElement("span",null,"알림 허용하기"))),
