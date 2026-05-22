@@ -1,6 +1,8 @@
-// MY ASSISTANT - Service Worker v1.2
-const CACHE_NAME = 'my-assistant-v1';
+// MY ASSISTANT - Service Worker v1.3
+const SW_VERSION = 'v1.3';
 let _scheduled = null;
+
+console.log('[SW ' + SW_VERSION + '] loaded');
 
 function _showNotif(title, body) {
   const scope = self.registration.scope;
@@ -8,21 +10,27 @@ function _showNotif(title, body) {
     body: body || '단계가 끝났어요!',
     icon: scope + 'icon.svg',
     badge: scope + 'badge.svg',
-    vibrate: [200, 80, 200, 80, 400],
-    // tag를 고정값으로 쓰면 Android가 "기존 알림 업데이트"로 인식 → 팝업 안 뜸
-    // 매번 다른 tag를 쓰면 항상 새 알림으로 인식 → 팝업(heads-up) 뜸
+    // 진동 패턴: 강하게 (heads-up trigger 조건 강화)
+    vibrate: [300, 100, 300, 100, 300, 100, 500],
+    // 매번 다른 tag → Android가 "새 알림"으로 인식 → 팝업 표시
     tag: 'timer-' + Date.now(),
     renotify: true,
     requireInteraction: true,
-    data: { url: scope }
+    // actions가 있으면 Android에서 더 prominent하게 표시되는 경향
+    actions: [
+      { action: 'open', title: '확인' }
+    ],
+    data: { url: scope, ts: Date.now() }
   });
 }
 
 self.addEventListener('install', event => {
+  console.log('[SW ' + SW_VERSION + '] install');
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
+  console.log('[SW ' + SW_VERSION + '] activate');
   event.waitUntil(clients.claim());
 });
 
@@ -45,6 +53,11 @@ self.addEventListener('message', event => {
 
   if (event.data.type === 'CANCEL_NOTIFICATION') {
     if (_scheduled) { clearTimeout(_scheduled); _scheduled = null; }
+  }
+
+  // 디버그용: 버전 확인
+  if (event.data.type === 'GET_SW_VERSION' && event.source) {
+    event.source.postMessage({ type: 'SW_VERSION', version: SW_VERSION });
   }
 });
 
