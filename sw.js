@@ -1,4 +1,4 @@
-// MY ASSISTANT - Service Worker v1.1
+// MY ASSISTANT - Service Worker v1.2
 const CACHE_NAME = 'my-assistant-v1';
 let _scheduled = null;
 
@@ -8,11 +8,13 @@ function _showNotif(title, body) {
     body: body || '단계가 끝났어요!',
     icon: scope + 'icon.svg',
     badge: scope + 'badge.svg',
-    vibrate: [200, 100, 200, 100, 400],
-    tag: 'timer-notification',
-    requireInteraction: false,
-    silent: false,
-    data: { url: self.location.origin }
+    vibrate: [200, 80, 200, 80, 400],
+    // tag를 고정값으로 쓰면 Android가 "기존 알림 업데이트"로 인식 → 팝업 안 뜸
+    // 매번 다른 tag를 쓰면 항상 새 알림으로 인식 → 팝업(heads-up) 뜸
+    tag: 'timer-' + Date.now(),
+    renotify: true,
+    requireInteraction: true,
+    data: { url: scope }
   });
 }
 
@@ -31,7 +33,6 @@ self.addEventListener('message', event => {
     event.waitUntil(_showNotif(event.data.title, event.data.body));
   }
 
-  // Android 백그라운드 대응: SW에 종료 시각을 등록해두고 직접 알림 발송
   if (event.data.type === 'SCHEDULE_NOTIFICATION') {
     if (_scheduled) { clearTimeout(_scheduled); _scheduled = null; }
     const { title, body, at } = event.data;
