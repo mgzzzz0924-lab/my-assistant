@@ -4,8 +4,8 @@
   "description": "개인 플래너 & 타이머",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f0eef8",
-  "theme_color": "#8878cc",
+  "background_color": "#1A1A1A",
+  "theme_color": "#1A1A1A",
   "icons": [
     {
       "src": "icon.svg",

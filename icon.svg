@@ -1,9 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="22" fill="#8878cc"/>
-  <rect x="14" y="18" width="72" height="48" rx="14" fill="white" opacity=".95"/>
-  <polygon points="24,64 12,82 46,64" fill="white" opacity=".95"/>
-  <circle cx="34" cy="42" r="6" fill="#8878cc"/>
-  <circle cx="50" cy="42" r="6" fill="#8878cc"/>
-  <circle cx="66" cy="42" r="6" fill="#8878cc"/>
-  <path d="M72 18 l2 5 l5 2 l-5 2 l-2 5 l-2-5 l-5-2 l5-2 z" fill="#ecd9a3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background: solid fill (Android masks to squircle/circle shape automatically) -->
+  <rect width="200" height="200" fill="#1A1A1A"/>
+  <!-- Man with glasses - white figure on dark background -->
+  <!-- Head (circle) -->
+  <circle cx="100" cy="74" r="32" fill="none" stroke="white" stroke-width="4"/>
+  <!-- Glasses bridge -->
+  <line x1="70" y1="60" x2="130" y2="60" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <!-- Left lens -->
+  <path d="M 70 60 L 88 78 L 100 60" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Right lens -->
+  <path d="M 100 60 L 112 78 L 130 60" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Left arm -->
+  <path d="M 28 196 Q 34 132 68 118" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <!-- Right arm -->
+  <path d="M 172 196 Q 166 132 132 118" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <!-- Body/shoulders -->
+  <path d="M 68 118 L 100 158 L 132 118" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Collar -->
+  <path d="M 90 118 L 110 118 L 112 132 L 88 132 Z" fill="none" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Tie -->
+  <path d="M 88 132 L 112 132 L 105 170 L 100 176 L 95 170 Z" fill="none" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Sparkle right -->
+  <path d="M 158 38 L 161.2 44.8 L 168 48 L 161.2 51.2 L 158 58 L 154.8 51.2 L 148 48 L 154.8 44.8 Z" fill="white"/>
+  <!-- Sparkle left -->
+  <path d="M 42 38 L 45.2 44.8 L 52 48 L 45.2 51.2 L 42 58 L 38.8 51.2 L 32 48 L 38.8 44.8 Z" fill="white"/>
 </svg>
