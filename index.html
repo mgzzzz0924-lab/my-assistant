@@ -17,8 +17,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css">
   <style>
-:root{--bg:#FFFFFF;--s1:#FFFFFF;--s2:#F7F6F4;--bd:#EEECEA;--lav:#1A1A1A;--lav-soft:#555555;--lav-pale:#F0EFED;--lav-xs:#FAFAF8;--t1:#1A1A1A;--t2:#888888;--t3:#C0BCBA;--red:#EF4444;--ora:#F97316;--ylw:#EAB308;--grn:#22C55E;--blu:#3B82F6;--ind:#6366F1;--pur:#8B5CF6;--shadow:0 1px 8px rgba(0,0,0,.04);--shadow-sm:0 1px 3px rgba(0,0,0,.03)}
-body.dark{--bg:#111111;--s1:#1C1C1E;--s2:#252527;--bd:#2C2C2E;--lav:#F0F0F0;--lav-soft:#AAAAAA;--lav-pale:#2C2C2E;--lav-xs:#1C1C1E;--t1:#F0F0F0;--t2:#888888;--t3:#444444;--red:#F87171;--ora:#FB923C;--ylw:#FCD34D;--grn:#4ADE80;--blu:#60A5FA;--ind:#818CF8;--pur:#A78BFA;--shadow:0 2px 20px rgba(0,0,0,.5);--shadow-sm:0 1px 8px rgba(0,0,0,.3)}
+:root{--bg:#FFFFFF;--s1:#FFFFFF;--s2:#F7F6F4;--bd:#EEECEA;--lav:#1A1A1A;--lav-soft:#555555;--lav-pale:#F0EFED;--lav-xs:#FAFAF8;--t1:#1A1A1A;--t2:#888888;--t3:#C0BCBA;--red:#EF4444;--ora:#F97316;--ylw:#FFD600;--grn:#22C55E;--blu:#3B82F6;--ind:#6366F1;--pur:#8B5CF6;--shadow:0 1px 8px rgba(0,0,0,.04);--shadow-sm:0 1px 3px rgba(0,0,0,.03)}
+body.dark{--bg:#111111;--s1:#1C1C1E;--s2:#252527;--bd:#2C2C2E;--lav:#F0F0F0;--lav-soft:#AAAAAA;--lav-pale:#2C2C2E;--lav-xs:#1C1C1E;--t1:#F0F0F0;--t2:#888888;--t3:#444444;--red:#F87171;--ora:#FB923C;--ylw:#FFE033;--grn:#4ADE80;--blu:#60A5FA;--ind:#818CF8;--pur:#A78BFA;--shadow:0 2px 20px rgba(0,0,0,.5);--shadow-sm:0 1px 8px rgba(0,0,0,.3)}
 *{margin:0;padding:0;box-sizing:border-box;transition:background-color .25s,border-color .25s,color .15s}
 body{background:var(--bg);color:var(--t1);font-family:'Pretendard','Segoe UI',sans-serif;min-height:100vh;font-size:14px}
 .hdr{padding:18px 18px 12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:var(--s1);border-bottom:none}
@@ -586,11 +586,11 @@ function Target({size=16,strokeWidth=2}){return React.createElement("svg",{width
 function Bell({size=14,strokeWidth=2}){return React.createElement("svg",{width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth,strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("path",{d:"M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"}),React.createElement("path",{d:"M13.73 21a2 2 0 0 1-3.46 0"}));}
 function Calendar({size=16,strokeWidth=2}){return React.createElement("svg",{width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth,strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("rect",{x:"3",y:"4",width:"18",height:"18",rx:"2",ry:"2"}),React.createElement("line",{x1:"16",y1:"2",x2:"16",y2:"6"}),React.createElement("line",{x1:"8",y1:"2",x2:"8",y2:"6"}),React.createElement("line",{x1:"3",y1:"10",x2:"21",y2:"10"}));}
 const WD=["일","월","화","수","목","금","토"];
-const SC=["#EF4444","#F97316","#EAB308","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
-const PALETTE7=["#EF4444","#F97316","#EAB308","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
+const SC=["#EF4444","#F97316","#FFD600","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
+const PALETTE7=["#EF4444","#F97316","#FFD600","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
 const SLOTS=[{key:"새벽",label:"새벽"},{key:"아침",label:"아침"},{key:"점심",label:"점심"},{key:"저녁",label:"저녁"}];
 const HOLIDAYS={"2025-01-01":"신정","2025-01-28":"설날연휴","2025-01-29":"설날","2025-01-30":"설날연휴","2025-03-01":"삼일절","2025-05-05":"어린이날·부처님오신날","2025-06-06":"현충일","2025-08-15":"광복절","2025-10-03":"개천절","2025-10-05":"추석연휴","2025-10-06":"추석","2025-10-07":"추석연휴","2025-10-09":"한글날","2025-12-25":"성탄절","2026-01-01":"신정","2026-02-16":"설날연휴","2026-02-17":"설날","2026-02-18":"설날연휴","2026-03-01":"삼일절","2026-05-05":"어린이날","2026-05-24":"부처님오신날","2026-06-06":"현충일","2026-08-15":"광복절","2026-09-24":"추석연휴","2026-09-25":"추석","2026-09-26":"추석연휴","2026-10-03":"개천절","2026-10-09":"한글날","2026-12-25":"성탄절"};
-const HABIT_COLORS=[{hex:"#EF4444",label:"빨강"},{hex:"#F97316",label:"주황"},{hex:"#EAB308",label:"노랑"},{hex:"#22C55E",label:"초록"},{hex:"#3B82F6",label:"파랑"},{hex:"#6366F1",label:"남색"},{hex:"#8B5CF6",label:"보라"}];
+const HABIT_COLORS=[{hex:"#EF4444",label:"빨강"},{hex:"#F97316",label:"주황"},{hex:"#FFD600",label:"노랑"},{hex:"#22C55E",label:"초록"},{hex:"#3B82F6",label:"파랑"},{hex:"#6366F1",label:"남색"},{hex:"#8B5CF6",label:"보라"}];
 function fmt(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function useLocalStorage(key,initial){const[value,setValue]=useState(()=>{try{const r=window.localStorage.getItem(key);return r===null?initial:JSON.parse(r);}catch{return initial;}});useEffect(()=>{try{window.localStorage.setItem(key,JSON.stringify(value));}catch{}},[key,value]);return[value,setValue];}
 const LblIcon=()=>React.createElement(Sparkles,{size:15,strokeWidth:2});
@@ -966,7 +966,7 @@ function TimerPage(){
   );
 }
 
-const PROJ_COLORS=["#EF4444","#F97316","#EAB308","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
+const PROJ_COLORS=["#EF4444","#F97316","#FFD600","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
 
 function ProjectTab({projects,setProjects,todos,setTodos,tidSeq,setTidSeq}){
   const today=fmt(new Date());const[projSeq,setProjSeq]=useLocalStorage("projSeq",1);const[taskSeq,setTaskSeq]=useLocalStorage("ptaskSeq",1);const[projMemos,setProjMemos]=useLocalStorage("projMemos",{});const[openProjs,setOpenProjs]=useState(new Set());const[taskForms,setTaskForms]=useState({});const[showNewForm,setShowNewForm]=useState(false);const[newProj,setNewProj]=useState({name:"",icon:"",date:"",desc:"",color:PROJ_COLORS[3],hasDate:false});const[expandedTaskId,setExpandedTaskId]=useState(null);
@@ -1061,7 +1061,7 @@ function StatisticsTab({habits,habitLog,dailyProgress,today}){
 function MemoTab(){
   const[memoCategories,setMemoCategories]=useLocalStorage("memoCategories",[]);const[memoCatSeq,setMemoCatSeq]=useLocalStorage("memoCatSeq",1);const[memos,setMemos]=useLocalStorage("memos",[]);const[memoSeq,setMemoSeq]=useLocalStorage("memoSeq",1);const[openCats,setOpenCats]=useState(new Set());const[subTab,setSubTab]=useState("all");const[showNewCatForm,setShowNewCatForm]=useState(false);const[newCat,setNewCat]=useState({name:"",icon:"",color:"#3B82F6"});const[selectedMemoId,setSelectedMemoId]=useState(null);const[editingMemoId,setEditingMemoId]=useState(null);const[showAddMemoForCat,setShowAddMemoForCat]=useState(null);
   const titleRef=useRef("");const bodyRef=useRef("");const tagsRef=useRef("");const editTitleRef=useRef("");const editBodyRef=useRef("");const editTagsRef=useRef("");const newCatNameRef=useRef("");const newCatIconRef=useRef("");
-  const CAT_COLORS=["#EF4444","#F97316","#EAB308","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
+  const CAT_COLORS=["#EF4444","#F97316","#FFD600","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
   function toggleCat(id){setOpenCats(prev=>{const n=new Set(prev);n.has(id)?n.delete(id):n.add(id);return n;});}
   function addCategory(){const name=newCatNameRef.current.trim();if(!name)return;const icon=newCatIconRef.current.trim()||"📝";setMemoCategories(prev=>[...prev,{id:memoCatSeq,name,icon,color:newCat.color}]);setMemoCatSeq(s=>s+1);newCatNameRef.current="";newCatIconRef.current="";document.querySelectorAll(".new-cat-name-inp").forEach(el=>el.value="");document.querySelectorAll(".new-cat-icon-inp").forEach(el=>el.value="");setShowNewCatForm(false);}
   function delCategory(id){if(!confirm("카테고리와 메모를 모두 삭제할까요?"))return;setMemoCategories(prev=>prev.filter(c=>c.id!==id));setMemos(prev=>prev.filter(m=>m.catId!==id));}
@@ -1115,7 +1115,7 @@ function MemoTab(){
         React.createElement("div",{className:"memo-cat-v2-body"},
           sorted.length===0?React.createElement("div",{style:{padding:"14px 16px",fontSize:12,color:"var(--t3)",textAlign:"center"}},"메모가 없어요"):sorted.map(m=>React.createElement("div",{key:m.id,className:"memo-item-v2",onClick:()=>setSelectedMemoId(m.id)},
             React.createElement("div",{className:"memo-item-v2-head"},
-              m.starred&&React.createElement("span",{style:{color:"#EAB308",fontSize:14}},"★"),
+              m.starred&&React.createElement("span",{style:{color:"#FFD600",fontSize:14}},"★"),
               React.createElement("span",{className:"memo-item-v2-title"},m.title),
               React.createElement("span",{className:"memo-item-v2-date"},(m.createdAt||"").slice(5).replace("-","/"))
             ),
