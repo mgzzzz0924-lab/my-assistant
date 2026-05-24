@@ -536,6 +536,11 @@ body.dark .greeting,body.dark .page-title,body.dark .stats3-val{color:var(--t1)}
 .icon-pick-btn{width:36px;height:36px;border:1.5px solid var(--bd);border-radius:8px;background:var(--s2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);padding:0;flex-shrink:0;transition:border-color .15s,background .15s,color .15s;}
 .icon-pick-btn:hover{border-color:var(--t1);color:var(--t1);}
 .icon-pick-btn.sel{border-color:var(--t1);background:var(--t1);color:#fff;}
+.icon-custom-svg{display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.icon-custom-svg svg{width:100%!important;height:100%!important;display:block;}
+.icon-svg-paste-toggle{font-size:11px;color:var(--t2);background:none;border:1px dashed var(--bd);border-radius:6px;padding:4px 10px;cursor:pointer;width:100%;text-align:left;margin-bottom:0;}
+.icon-svg-paste-toggle:hover{border-color:var(--t2);color:var(--t1);}
+.icon-svg-paste-toggle.active{color:var(--grn);border-color:var(--grn);}
   </style>
 </head>
 <body>
@@ -622,8 +627,33 @@ const ICON_SET=[
   {id:"pen",label:"글쓰기",Comp:IcPen},{id:"smile",label:"긍정",Comp:IcSmile},{id:"trophy",label:"성취",Comp:IcTrophy},
   {id:"run",label:"달리기",Comp:IcRun},{id:"diet",label:"식단",Comp:IcApple},{id:"camera",label:"사진",Comp:IcCamera},{id:"home",label:"집",Comp:IcHome},
 ];
-function renderHabitIcon(iconId,size=18){if(!iconId)return null;const found=ICON_SET.find(ic=>ic.id===iconId);if(found)return React.createElement(found.Comp,{size,sw:2});return iconId;}
-function IconPicker({value,onChange}){return React.createElement("div",{className:"icon-picker-grid"},ICON_SET.map(ic=>React.createElement("button",{key:ic.id,type:"button",className:"icon-pick-btn"+(value===ic.id?" sel":""),onClick:()=>onChange(ic.id),title:ic.label},React.createElement(ic.Comp,{size:18,sw:2}))));}
+function renderHabitIcon(iconId,size=18){if(!iconId)return null;if(typeof iconId==="string"&&iconId.trim().startsWith("<svg")){return React.createElement("div",{className:"icon-custom-svg",style:{width:size,height:size},dangerouslySetInnerHTML:{__html:iconId}});}const found=ICON_SET.find(ic=>ic.id===iconId);if(found)return React.createElement(found.Comp,{size,sw:2});return iconId;}
+function IconPicker({value,onChange}){
+  const isCustom=typeof value==="string"&&value.trim().startsWith("<svg");
+  const[customSvg,setCustomSvg]=useState(()=>isCustom?value:"");
+  const[showCustom,setShowCustom]=useState(()=>isCustom);
+  const previewValid=customSvg.trim().startsWith("<svg");
+  const applied=previewValid&&customSvg.trim()===value;
+  return React.createElement("div",null,
+    React.createElement("div",{className:"icon-picker-grid"},ICON_SET.map(ic=>React.createElement("button",{key:ic.id,type:"button",className:"icon-pick-btn"+(value===ic.id?" sel":""),onClick:()=>onChange(ic.id),title:ic.label},React.createElement(ic.Comp,{size:18,sw:2})))),
+    React.createElement("button",{type:"button",className:"icon-svg-paste-toggle"+(isCustom?" active":""),onClick:()=>setShowCustom(s=>!s)},
+      (isCustom?"✓ ":"")+(showCustom?"▲ ":"▼ ")+"SVG 직접 붙여넣기"
+    ),
+    showCustom&&React.createElement("div",{style:{marginTop:6}},
+      React.createElement("textarea",{
+        placeholder:"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\">...</svg>",
+        value:customSvg,
+        onChange:e=>setCustomSvg(e.target.value),
+        style:{width:"100%",height:72,fontSize:11,borderRadius:8,border:"1.5px solid var(--bd)",padding:"6px 8px",resize:"vertical",fontFamily:"monospace",boxSizing:"border-box",marginTop:0,background:"var(--s1)",color:"var(--t1)",display:"block"}
+      }),
+      previewValid&&React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8,marginTop:6}},
+        React.createElement("div",{style:{width:36,height:36,border:"1.5px solid var(--bd)",borderRadius:8,background:"var(--s2)",overflow:"hidden",flexShrink:0,color:"var(--t1)",display:"flex",alignItems:"center",justifyContent:"center"},dangerouslySetInnerHTML:{__html:customSvg}}),
+        React.createElement("button",{type:"button",onClick:()=>{onChange(customSvg.trim());setShowCustom(false);},style:{fontSize:12,background:"var(--t1)",color:"#fff",border:"none",borderRadius:8,padding:"6px 14px",cursor:"pointer",flexShrink:0}},"적용"),
+        applied&&React.createElement("span",{style:{fontSize:11,color:"var(--grn)"}},"✓ 현재 적용됨")
+      )
+    )
+  );
+}
 const WD=["일","월","화","수","목","금","토"];
 const SC=["#EF4444","#F97316","#FFD600","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
 const PALETTE7=["#EF4444","#F97316","#FFD600","#22C55E","#3B82F6","#6366F1","#8B5CF6"];
