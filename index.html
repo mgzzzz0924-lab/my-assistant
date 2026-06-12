@@ -541,6 +541,35 @@ body.dark .greeting,body.dark .page-title,body.dark .stats3-val{color:var(--t1)}
 .icon-svg-paste-toggle{font-size:11px;color:var(--t2);background:none;border:1px dashed var(--bd);border-radius:6px;padding:4px 10px;cursor:pointer;width:100%;text-align:left;margin-bottom:0;}
 .icon-svg-paste-toggle:hover{border-color:var(--t2);color:var(--t1);}
 .icon-svg-paste-toggle.active{color:var(--grn);border-color:var(--grn);}
+/* === WOOP === */
+.woop-intro{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--t2)}
+.woop-intro b{color:var(--t1);font-weight:700}
+.woop-step{background:var(--s1);border:1px solid var(--bd);border-left:4px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px}
+.woop-step-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.woop-badge{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Space Mono',monospace}
+.woop-step-title{font-size:15px;font-weight:700;color:var(--t1);line-height:1.2}
+.woop-step-sub{font-size:11px;color:var(--t2);margin-top:3px;font-weight:500;line-height:1.4}
+.woop-step textarea,.woop-step input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:var(--t1);outline:none;resize:none;line-height:1.6;transition:.2s;box-sizing:border-box}
+.woop-step textarea:focus,.woop-step input:focus{border-color:var(--t2);background:var(--s1)}
+.woop-plan-preview{margin-top:11px;font-size:13px;color:var(--t1);background:var(--lav-xs);border:1px solid var(--bd);border-radius:10px;padding:11px 13px;line-height:1.7}
+.woop-plan-preview b{font-weight:700}
+.woop-plan-preview .ph{color:var(--t3);font-weight:400}
+.woop-save-btn{width:100%;background:#1A1A1A;color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;transition:.15s}
+.woop-save-btn:hover{opacity:.85}
+.woop-done-tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--grn);font-weight:700}
+.woop-streak-badge{display:inline-flex;align-items:center;gap:4px;background:var(--lav-xs);border:1px solid var(--bd);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;color:var(--t1);flex-shrink:0;white-space:nowrap}
+.woop-hist-card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:8px}
+.woop-hist-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer}
+.woop-hist-date{font-size:14px;font-weight:700;color:var(--t1);flex-shrink:0}
+.woop-hist-wish{flex:1;font-size:12px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.woop-hist-arrow{color:var(--t3);transition:.2s;flex-shrink:0}
+.woop-hist-card.open .woop-hist-arrow{transform:rotate(90deg)}
+.woop-hist-body{display:none;padding:4px 16px 14px;border-top:1px solid var(--bd)}
+.woop-hist-card.open .woop-hist-body{display:block}
+.woop-hist-line{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--bd)}
+.woop-hist-line:last-of-type{border-bottom:none}
+.woop-hist-k{font-size:11px;font-weight:700;color:#fff;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Mono',monospace}
+.woop-hist-v{flex:1;font-size:13px;color:var(--t1);line-height:1.55}
   </style>
 </head>
 <body>
@@ -557,7 +586,7 @@ const firebaseConfig={apiKey:"AIzaSyCWQHApG7JGVbIrc19Y6XFUqc-urFmPpKE",authDomai
 firebase.initializeApp(firebaseConfig);
 const _auth=firebase.auth();
 const _db=firebase.firestore();
-const SYNC_KEYS=["todos","tidSeq","habits","hbSeq","habitLog","dailyProgress","sharedEvs","evSeq","weekGoals","wgSeq","monthGoals","mgSeq","projects","projSeq","ptaskSeq","projMemos","timerCats","catSeq","stepSeq","darkMode","memoCategories","memoCatSeq","memos","memoSeq"];
+const SYNC_KEYS=["todos","tidSeq","habits","hbSeq","habitLog","dailyProgress","sharedEvs","evSeq","weekGoals","wgSeq","monthGoals","mgSeq","projects","projSeq","ptaskSeq","projMemos","timerCats","catSeq","stepSeq","darkMode","memoCategories","memoCatSeq","memos","memoSeq","woops"];
 function showToast(msg){const el=document.getElementById("syncToast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2500);}
 async function syncPush(uid){const data={};SYNC_KEYS.forEach(k=>{try{const v=localStorage.getItem(k);if(v!==null)data[k]=JSON.parse(v);}catch{}});data._updatedAt=Date.now();await _db.collection("users").doc(uid).set(data);showToast("☁️ 저장 완료!");}
 let _pulling=false;
@@ -1224,6 +1253,90 @@ function MemoTab(){
   );
 }
 
+function WoopTab(){
+  const[woops,setWoops]=useLocalStorage("woops",{});
+  const todayStr=fmt(new Date());
+  const saved=woops[todayStr];
+  const[w,setW]=useState(()=>(saved&&saved.w)||"");
+  const[oc,setOc]=useState(()=>(saved&&saved.outcome)||"");
+  const[ob,setOb]=useState(()=>(saved&&saved.obstacle)||"");
+  const[ifp,setIfp]=useState(()=>(saved&&saved.ifPart)||"");
+  const[thp,setThp]=useState(()=>(saved&&saved.thenPart)||"");
+  const[helpOpen,setHelpOpen]=useState(()=>Object.keys(woops).length===0);
+  const[openHist,setOpenHist]=useState(()=>new Set());
+  const h=new Date().getHours();
+  const greet=h<5?"고요한 새벽이에요":h<11?"좋은 아침이에요":h<17?"좋은 오후예요":"좋은 저녁이에요";
+  const C={W:"#6366F1",O1:"#22C55E",O2:"#F97316",P:"#1A1A1A"};
+  function dLabel(ds){const p=ds.split("-").map(Number);const dt=new Date(p[0],p[1]-1,p[2]);return p[1]+"월 "+p[2]+"일 ("+WD[dt.getDay()]+")";}
+  function save(){if(!w.trim()){alert("오늘 이루고 싶은 것(Wish)을 먼저 적어주세요!");return;}setWoops(prev=>({...prev,[todayStr]:{w:w.trim(),outcome:oc.trim(),obstacle:ob.trim(),ifPart:ifp.trim(),thenPart:thp.trim(),ts:Date.now()}}));showToast("🌱 오늘의 WOOP을 기록했어요!");}
+  let streak=0;{const d=new Date();if(!(woops[fmt(d)]&&woops[fmt(d)].w))d.setDate(d.getDate()-1);while(woops[fmt(d)]&&woops[fmt(d)].w){streak++;d.setDate(d.getDate()-1);}}
+  const histDates=Object.keys(woops).filter(d=>d!==todayStr&&woops[d]&&woops[d].w).sort().reverse();
+  function toggleHist(d){setOpenHist(prev=>{const n=new Set(prev);n.has(d)?n.delete(d):n.add(d);return n;});}
+  function stepBlock(letter,color,title,sub,node){
+    return React.createElement("div",{className:"woop-step",style:{borderLeftColor:color}},
+      React.createElement("div",{className:"woop-step-head"},
+        React.createElement("div",{className:"woop-badge",style:{background:color}},letter),
+        React.createElement("div",null,
+          React.createElement("div",{className:"woop-step-title"},title),
+          React.createElement("div",{className:"woop-step-sub"},sub))),
+      node);
+  }
+  return React.createElement(React.Fragment,null,
+    React.createElement("div",{className:"page-eyebrow"},greet),
+    React.createElement("div",{className:"page-title-row"},
+      React.createElement("div",{className:"page-title"},"WOOP"),
+      streak>0&&React.createElement("div",{className:"woop-streak-badge"},"🔥 "+streak+"일째")),
+    React.createElement("div",{className:"woop-intro"},
+      React.createElement("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"},onClick:()=>setHelpOpen(v=>!v)},
+        React.createElement("b",null,"WOOP이 뭔가요?"),
+        React.createElement("span",{style:{color:"var(--t3)",fontSize:18,transform:helpOpen?"rotate(90deg)":"none",transition:".2s",display:"inline-block"}},"›")),
+      helpOpen&&React.createElement("div",{style:{marginTop:10,lineHeight:1.8}},
+        "심리학자 Gabriele Oettingen의 검증된 방법(94개 연구 메타분석). 그냥 ‘잘 될 거야’ 상상만 하면 뇌가 이미 이룬 듯 착각해 행동력이 오히려 줄어요. 대신 ",
+        React.createElement("b",null,"소망 → 결과 → 장애물 → 계획"),"을 매일 한 번 적으면 실행력이 올라갑니다.",
+        React.createElement("div",{style:{marginTop:11,padding:"11px 13px",background:"var(--s1)",borderRadius:10,border:"1px solid var(--bd)",fontSize:12,color:"var(--t2)",lineHeight:1.9}},
+          React.createElement("div",null,React.createElement("b",{style:{color:C.W}},"W"),"  오늘 행정학 3챕터 복습"),
+          React.createElement("div",null,React.createElement("b",{style:{color:C.O1}},"O"),"  시험 전 키워드 회상 자신감"),
+          React.createElement("div",null,React.createElement("b",{style:{color:C.O2}},"O"),"  저녁에 폰 보다 늘어짐"),
+          React.createElement("div",null,React.createElement("b",{style:{color:C.P}},"P"),"  만약 저녁 9시에 폰을 집으면, 폰을 방 밖에 두고 책상에 앉는다")))),
+    stepBlock("W",C.W,"Wish · 소망","오늘 진짜 이루고 싶은 것 하나",
+      React.createElement("textarea",{rows:2,value:w,onChange:e=>setW(e.target.value),placeholder:"예: 오늘 행정학 3챕터 복습"})),
+    stepBlock("O",C.O1,"Outcome · 결과","이뤘을 때 가장 좋은 결과를 잠깐 떠올려보세요",
+      React.createElement("textarea",{rows:2,value:oc,onChange:e=>setOc(e.target.value),placeholder:"예: 시험 전 키워드 회상 자신감"})),
+    stepBlock("O",C.O2,"Obstacle · 장애물","나를 막을 가장 현실적인 방해물 (내 안의 것)",
+      React.createElement("textarea",{rows:2,value:ob,onChange:e=>setOb(e.target.value),placeholder:"예: 저녁에 폰 보다 늘어짐"})),
+    stepBlock("P",C.P,"Plan · 계획","방해물이 나타나면 할 행동을 미리 정해두세요 (If-then)",
+      React.createElement(React.Fragment,null,
+        React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:8,flexWrap:"wrap"}},
+          React.createElement("span",{style:{fontSize:13,color:"var(--t2)",fontWeight:700,minWidth:40}},"만약"),
+          React.createElement("input",{value:ifp,onChange:e=>setIfp(e.target.value),placeholder:ob.trim()||"예: 저녁 9시에 폰을 집으면",style:{flex:1,minWidth:130}})),
+        React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}},
+          React.createElement("span",{style:{fontSize:13,color:"var(--t2)",fontWeight:700,minWidth:40}},"그러면"),
+          React.createElement("input",{value:thp,onChange:e=>setThp(e.target.value),placeholder:"예: 폰을 방 밖에 두고 책상에 앉는다",style:{flex:1,minWidth:130}})),
+        (ifp.trim()||thp.trim())&&React.createElement("div",{className:"woop-plan-preview"},
+          "만약 ",ifp.trim()?React.createElement("b",null,ifp.trim()):React.createElement("span",{className:"ph"},"___"),
+          ", ",thp.trim()?React.createElement("b",null,thp.trim()):React.createElement("span",{className:"ph"},"___"),"."))),
+    React.createElement("button",{className:"woop-save-btn",onClick:save},saved?"오늘 WOOP 수정하기":"오늘 WOOP 저장하기"),
+    saved&&React.createElement("div",{style:{textAlign:"center",marginTop:10}},React.createElement("span",{className:"woop-done-tag"},"✓ 오늘 작성 완료")),
+    histDates.length>0&&React.createElement(React.Fragment,null,
+      React.createElement("div",{className:"section-hdr",style:{marginTop:24}},React.createElement("span",null,"지난 기록"),React.createElement("span",{className:"count"},histDates.length+"일")),
+      histDates.map(d=>{
+        const e=woops[d];const isOpen=openHist.has(d);
+        const lines=[{k:"W",c:C.W,v:e.w},{k:"O",c:C.O1,v:e.outcome},{k:"O",c:C.O2,v:e.obstacle},{k:"P",c:C.P,v:(e.ifPart||e.thenPart)?("만약 "+(e.ifPart||"___")+", "+(e.thenPart||"___")):""}].filter(l=>l.v);
+        return React.createElement("div",{key:d,className:"woop-hist-card"+(isOpen?" open":"")},
+          React.createElement("div",{className:"woop-hist-head",onClick:()=>toggleHist(d)},
+            React.createElement("span",{className:"woop-hist-date"},dLabel(d)),
+            !isOpen&&React.createElement("span",{className:"woop-hist-wish"},e.w),
+            isOpen&&React.createElement("span",{style:{flex:1}}),
+            React.createElement("span",{className:"woop-hist-arrow"},"›")),
+          React.createElement("div",{className:"woop-hist-body"},
+            lines.map((l,i)=>React.createElement("div",{key:i,className:"woop-hist-line"},
+              React.createElement("span",{className:"woop-hist-k",style:{background:l.c}},l.k),
+              React.createElement("span",{className:"woop-hist-v"},l.v))),
+            React.createElement("button",{className:"btn-icon",style:{color:"var(--red)",marginTop:10,fontSize:12},onClick:()=>{if(confirm(dLabel(d)+" 기록을 삭제할까요?"))setWoops(prev=>{const n={...prev};delete n[d];return n;});}},"삭제")));
+      }))
+  );
+}
+
 function AssistantApp(){
   const[tab,setTab]=useState("planner");const[sub,setSub]=useState("daily");const[calView,setCalView]=useState("weekly");const[dark,setDark]=useLocalStorage("darkMode",false);const[tabKey,setTabKey]=useState(0);const[subKey,setSubKey]=useState(0);const[todos,setTodos]=useLocalStorage("todos",[]);const[tidSeq,setTidSeq]=useLocalStorage("tidSeq",1);const[habits,setHabits]=useLocalStorage("habits",[]);const[habitLog,setHabitLog]=useLocalStorage("habitLog",{});const[dailyProgress,setDailyProgress]=useLocalStorage("dailyProgress",{});const[projects,setProjects]=useLocalStorage("projects",[]);const[fbUser,setFbUser]=useState(()=>_auth.currentUser);
   const[today,setToday]=useState(()=>fmt(new Date()));const[now,setNow]=useState(()=>new Date());const dateLabel=`${WD[now.getDay()]} · ${now.getMonth()+1}월 ${now.getDate()}일`;
@@ -1267,7 +1380,8 @@ function AssistantApp(){
     tab==="planner"&&React.createElement("div",{key:"pl"+tabKey,className:"page tab-anim"},React.createElement("div",{key:subKey,className:"tab-anim"},sub==="daily"&&React.createElement(DailyTab,{todos,setTodos,tidSeq,setTidSeq,habits,setHabits,habitLog,setHabitLog,dailyProgress,setDailyProgress,today,projects,setProjects}),sub==="project"&&React.createElement(ProjectTab,{projects,setProjects,todos,setTodos,tidSeq,setTidSeq}),sub==="calendar"&&React.createElement(React.Fragment,null,React.createElement("div",{className:"sub-tabs"},CAL_VIEWS.map(v=>React.createElement("button",{key:v.key,className:"sub-tab"+(calView===v.key?" on":""),onClick:()=>setCalView(v.key)},v.label))),calView==="weekly"&&React.createElement(WeeklyTab,{habits,habitLog,toggleHabitLog,shared,today,gcalReady,gcalDone,setGcalDone}),calView==="monthly"&&React.createElement(MonthlyTab,{habits,habitLog,toggleHabitLog,shared,dailyProgress,today,gcalReady,gcalDone,setGcalDone}),calView==="statistics"&&React.createElement(StatisticsTab,{habits,habitLog,dailyProgress,today})))),
     tab==="timer"&&React.createElement("div",{key:"ti"+tabKey,className:"page tab-anim"},React.createElement(TimerPage)),
     tab==="memo"&&React.createElement("div",{key:"me"+tabKey,className:"page tab-anim"},React.createElement(MemoTab)),
-    React.createElement("nav",{className:"bnav"},React.createElement("button",{className:tab==="planner"?"active":"",onClick:()=>switchTab("planner")},React.createElement(Calendar,{size:20,strokeWidth:1.5}),React.createElement("span",null,"Planner")),React.createElement("button",{className:tab==="timer"?"active":"",onClick:()=>switchTab("timer")},React.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("circle",{cx:"12",cy:"12",r:"10"}),React.createElement("polyline",{points:"12 6 12 12 16 14"})),React.createElement("span",null,"Timer")),React.createElement("button",{className:tab==="memo"?"active":"",onClick:()=>switchTab("memo")},React.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("path",{d:"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"}),React.createElement("polyline",{points:"14 2 14 8 20 8"}),React.createElement("line",{x1:"16",y1:"13",x2:"8",y2:"13"}),React.createElement("line",{x1:"16",y1:"17",x2:"8",y2:"17"})),React.createElement("span",null,"Memo")))
+    tab==="woop"&&React.createElement("div",{key:"wo"+tabKey,className:"page tab-anim"},React.createElement(WoopTab)),
+    React.createElement("nav",{className:"bnav"},React.createElement("button",{className:tab==="planner"?"active":"",onClick:()=>switchTab("planner")},React.createElement(Calendar,{size:20,strokeWidth:1.5}),React.createElement("span",null,"Planner")),React.createElement("button",{className:tab==="woop"?"active":"",onClick:()=>switchTab("woop")},React.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("circle",{cx:"12",cy:"12",r:"10"}),React.createElement("circle",{cx:"12",cy:"12",r:"6"}),React.createElement("circle",{cx:"12",cy:"12",r:"2"})),React.createElement("span",null,"WOOP")),React.createElement("button",{className:tab==="timer"?"active":"",onClick:()=>switchTab("timer")},React.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("circle",{cx:"12",cy:"12",r:"10"}),React.createElement("polyline",{points:"12 6 12 12 16 14"})),React.createElement("span",null,"Timer")),React.createElement("button",{className:tab==="memo"?"active":"",onClick:()=>switchTab("memo")},React.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("path",{d:"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"}),React.createElement("polyline",{points:"14 2 14 8 20 8"}),React.createElement("line",{x1:"16",y1:"13",x2:"8",y2:"13"}),React.createElement("line",{x1:"16",y1:"17",x2:"8",y2:"17"})),React.createElement("span",null,"Memo")))
   );
 }
 const _rootEl=document.getElementById("root");
